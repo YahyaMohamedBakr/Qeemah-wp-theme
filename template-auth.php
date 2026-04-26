@@ -12,6 +12,7 @@ if (is_user_logged_in()) {
 $login_error = '';
 $register_error = '';
 $register_success = false;
+$form_data = array('user_login' => '', 'user_email' => '', 'user_phone' => '');
 
 // Handle Login
 if (isset($_POST['qimah_login_nonce']) && wp_verify_nonce($_POST['qimah_login_nonce'], 'qimah_login_action')) {
@@ -22,7 +23,14 @@ if (isset($_POST['qimah_login_nonce']) && wp_verify_nonce($_POST['qimah_login_no
     );
     $user = wp_signon($creds, false);
     if (is_wp_error($user)) {
-        $login_error = $user->get_error_message();
+        $login_error = wp_strip_all_tags($user->get_error_message());
+        // Translate common WordPress error messages to Arabic
+        $login_error = str_replace('The password you entered for the username', 'كلمة المرور التي أدخلتها لاسم المستخدم', $login_error);
+        $login_error = str_replace('is incorrect.', 'غير صحيحة.', $login_error);
+        $login_error = str_replace('Invalid username', 'اسم المستخدم غير صالح', $login_error);
+        $login_error = str_replace('Invalid email address.', 'البريد الإلكتروني غير صالح.', $login_error);
+        $login_error = preg_replace('/Lost your password\?/', '', $login_error);
+        $login_error = trim($login_error);
     } else {
         $redirect = isset($_POST['redirect_to']) ? esc_url($_POST['redirect_to']) : home_url('/dashboard');
         wp_safe_redirect($redirect);
@@ -36,13 +44,26 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
     $email      = sanitize_email($_POST['user_email']);
     $password   = $_POST['user_pass'];
     $phone      = sanitize_text_field($_POST['user_phone'] ?? '');
+    $pass_confirm = isset($_POST['user_pass_confirm']) ? $_POST['user_pass_confirm'] : '';
+    $terms_accepted = isset($_POST['terms']);
+
+    // Store submitted data to repopulate form on error
+    $form_data = array(
+        'user_login' => $username,
+        'user_email' => $email,
+        'user_phone' => $phone,
+    );
 
     if (empty($username) || empty($email) || empty($password)) {
         $register_error = 'يرجى ملء جميع الحقول المطلوبة.';
     } elseif (strlen($password) < 8) {
         $register_error = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل.';
+    } elseif ($password !== $pass_confirm) {
+        $register_error = 'كلمتا المرور غير متطابقتين.';
+    } elseif (!$terms_accepted) {
+        $register_error = 'يجب الموافقة على شروط الاستخدام وسياسة الخصوصية لإنشاء الحساب.';
     } elseif (email_exists($email)) {
-        $register_error = 'البريد الإلكتروني مسجل بالفعل.';
+        $register_error = 'البريد الإلكتروني مسجل بالفعل. <a href="#" onclick="document.getElementById(\'tabLogin\').click(); return false;">سجّل دخولك من هنا</a>.';
     } elseif (username_exists($username)) {
         $register_error = 'اسم المستخدم مسجل بالفعل.';
     } else {
@@ -64,7 +85,7 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
             wp_safe_redirect(home_url('/dashboard'));
             exit;
         } else {
-            $register_error = $user_id->get_error_message();
+            $register_error = wp_strip_all_tags($user_id->get_error_message());
         }
     }
 }
@@ -264,7 +285,7 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
                     <?php if ($register_error) : ?>
                     <div class="auth-notice auth-notice-error">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <span><?php echo esc_html($register_error); ?></span>
+                        <span><?php echo wp_kses($register_error, array('a' => array('href' => array(), 'onclick' => array()))); ?></span>
                     </div>
                     <?php endif; ?>
 
@@ -276,7 +297,7 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
                             <label class="auth-field-label" for="regName">الاسم الكامل</label>
                             <div class="auth-field-input-wrap">
                                 <i class="fas fa-user auth-field-icon"></i>
-                                <input type="text" name="user_login" id="regName" class="auth-field-input" placeholder="أدخل اسمك الكامل" autocomplete="name" required>
+                                <input type="text" name="user_login" id="regName" class="auth-field-input" placeholder="أدخل اسمك الكامل" autocomplete="name" required value="<?php echo esc_attr($form_data['user_login']); ?>">
                                 <span class="auth-field-success-icon"><i class="fas fa-check-circle"></i></span>
                             </div>
                         </div>
@@ -286,7 +307,7 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
                             <label class="auth-field-label" for="regEmail">البريد الإلكتروني</label>
                             <div class="auth-field-input-wrap">
                                 <i class="fas fa-envelope auth-field-icon"></i>
-                                <input type="email" name="user_email" id="regEmail" class="auth-field-input" placeholder="أدخل بريدك الإلكتروني" autocomplete="email" required>
+                                <input type="email" name="user_email" id="regEmail" class="auth-field-input" placeholder="أدخل بريدك الإلكتروني" autocomplete="email" required value="<?php echo esc_attr($form_data['user_email']); ?>">
                                 <span class="auth-field-success-icon"><i class="fas fa-check-circle"></i></span>
                             </div>
                         </div>
@@ -296,7 +317,7 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
                             <label class="auth-field-label" for="regPhone">رقم الجوال</label>
                             <div class="auth-field-input-wrap">
                                 <i class="fas fa-phone auth-field-icon"></i>
-                                <input type="tel" name="user_phone" id="regPhone" class="auth-field-input" placeholder="05xxxxxxxx" autocomplete="tel">
+                                <input type="tel" name="user_phone" id="regPhone" class="auth-field-input" placeholder="05xxxxxxxx" autocomplete="tel" value="<?php echo esc_attr($form_data['user_phone']); ?>">
                                 <span class="auth-field-success-icon"><i class="fas fa-check-circle"></i></span>
                             </div>
                         </div>
@@ -342,10 +363,14 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
                         <!-- Terms Checkbox -->
                         <div class="auth-terms">
                             <label class="auth-checkbox-wrap">
-                                <input type="checkbox" name="terms" id="termsCheck" required>
+                                <input type="checkbox" name="terms" id="termsCheck">
                                 <span class="auth-checkbox-custom"><i class="fas fa-check"></i></span>
                                 <span class="auth-checkbox-label">أوافق على <a href="#" target="_blank">شروط الاستخدام</a> و<a href="#" target="_blank">سياسة الخصوصية</a></span>
                             </label>
+                            <div class="auth-field-error" id="termsError" style="display:none; margin-top: 8px;">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>يجب الموافقة على شروط الاستخدام وسياسة الخصوصية</span>
+                            </div>
                         </div>
 
                         <!-- Submit -->
@@ -372,25 +397,34 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Tab switching
-        const tabs = document.querySelectorAll('.auth-tab');
-        const slider = document.getElementById('authTabSlider');
-        const panels = document.querySelectorAll('.auth-form-panel');
+        // Tab switching function
+        function switchTab(target) {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const slider = document.getElementById('authTabSlider');
+            const panels = document.querySelectorAll('.auth-form-panel');
 
-        tabs.forEach(function(tab) {
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            document.querySelector('[data-tab="' + target + '"]').classList.add('active');
+            panels.forEach(function(p) { p.classList.remove('active'); });
+            document.getElementById(target + 'Panel').classList.add('active');
+            if (target === 'register') {
+                slider.classList.add('register');
+            } else {
+                slider.classList.remove('register');
+            }
+        }
+
+        // Tab click handlers
+        document.querySelectorAll('.auth-tab').forEach(function(tab) {
             tab.addEventListener('click', function() {
-                const target = this.dataset.tab;
-                tabs.forEach(function(t) { t.classList.remove('active'); });
-                this.classList.add('active');
-                panels.forEach(function(p) { p.classList.remove('active'); });
-                document.getElementById(target + 'Panel').classList.add('active');
-                if (target === 'register') {
-                    slider.classList.add('register');
-                } else {
-                    slider.classList.remove('register');
-                }
+                switchTab(this.dataset.tab);
             });
         });
+
+        // Auto-switch to register tab if there's a registration error
+        <?php if ($register_error) : ?>
+        switchTab('register');
+        <?php endif; ?>
 
         // Password toggle
         document.querySelectorAll('.auth-password-toggle').forEach(function(btn) {
@@ -474,6 +508,40 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
                 } else if (this.value.length > 0) {
                     this.classList.add('is-invalid');
                     this.classList.remove('is-valid');
+                }
+            });
+        }
+
+        // Terms checkbox validation on change
+        const termsCheck = document.getElementById('termsCheck');
+        const termsError = document.getElementById('termsError');
+        if (termsCheck) {
+            termsCheck.addEventListener('change', function() {
+                if (this.checked) {
+                    termsError.style.display = 'none';
+                }
+            });
+        }
+
+        // Register form client-side validation
+        const registerForm = document.getElementById('registerForm');
+        if (registerForm) {
+            registerForm.addEventListener('submit', function(e) {
+                // Check terms checkbox
+                if (termsCheck && !termsCheck.checked) {
+                    e.preventDefault();
+                    termsError.style.display = 'flex';
+                    termsCheck.closest('.auth-terms').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return false;
+                }
+
+                // Check password match
+                if (passwordInput && confirmInput && passwordInput.value !== confirmInput.value) {
+                    e.preventDefault();
+                    confirmError.classList.add('visible');
+                    confirmInput.classList.add('is-invalid');
+                    confirmInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return false;
                 }
             });
         }
