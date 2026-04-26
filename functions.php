@@ -175,31 +175,70 @@ add_filter('excerpt_more', 'qimah_excerpt_more');
 require_once QIMAH_DIR . '/inc/customizer.php';
 require_once QIMAH_DIR . '/inc/template-tags.php';
 
-/* ---------- Tutor LMS Integration ---------- */
+/* ---------- Tutor LMS Integration ----------
+ * Following Edubin's approach:
+ * - We override Tutor LMS templates via the tutor/ folder in theme root
+ *   (WordPress's standard template override convention for plugins)
+ * - Single course page: tutor/single-course.php overrides Tutor LMS's template
+ * - Enrollment is fully delegated to Tutor LMS via tutor_load_template('single.course.course-entry-box')
+ * - Curriculum, reviews, etc. are rendered by Tutor LMS's own tab system
+ * - We only use template_include for the archive (listing) page
+ * - All Tutor LMS API functions are the correct ones verified from Edubin theme
+ */
 if (function_exists('tutor')) {
+    // Override archive page only
     add_filter('template_include', 'qimah_tutor_template', 99);
     function qimah_tutor_template($template) {
         if (is_post_type_archive('courses')) {
             $new = QIMAH_DIR . '/template-courses.php';
             if (file_exists($new)) return $new;
         }
+        return $template;
+    }
+
+    // Enqueue Tutor LMS compatibility styles
+    add_action('wp_enqueue_scripts', 'qimah_tutor_styles', 20);
+    function qimah_tutor_styles() {
+        wp_enqueue_style('qimah-tutor', QIMAH_URI . '/assets/css/tutor.css', array('qimah-template-style'), QIMAH_VERSION);
+    }
+
+    // Add body class for single course
+    add_filter('body_class', 'qimah_tutor_body_class');
+    function qimah_tutor_body_class($classes) {
         if (is_singular('courses')) {
-            $new = QIMAH_DIR . '/template-single-course.php';
-            if (file_exists($new)) return $new;
+            $classes[] = 'single-tutor-course';
         }
         if (is_singular('lesson')) {
-            $new = QIMAH_DIR . '/template-single-lesson.php';
-            if (file_exists($new)) return $new;
+            $classes[] = 'single-tutor-lesson';
         }
-        return $template;
+        return $classes;
     }
 }
 
-/* ---------- Helper: Get First Lesson URL ---------- */
+/* ---------- Tutor LMS Helper Functions ---------- */
+
+/**
+ * Get the first lesson URL for a course (used in dashboard "Continue Learning" button)
+ */
 function qimah_get_course_first_lesson_url($course_id) {
     if (!function_exists('tutor_utils')) return get_permalink($course_id);
-    
-    // Method 1: Direct query for lessons linked to this course
+
+    // Use Tutor LMS's topic/lesson system
+    $topics = tutor_utils()->get_course_topics($course_id);
+    if (is_array($topics) && !empty($topics)) {
+        foreach ($topics as $topic) {
+            $topic_id = isset($topic->comment_ID) ? $topic->comment_ID : $topic->ID;
+            if (function_exists('tutor_lessons')) {
+                $lessons = tutor_lessons()->get_lessons_by_topic($topic_id);
+                $lessons = is_array($lessons) ? $lessons : array();
+                if (!empty($lessons)) {
+                    return get_permalink($lessons[0]->ID);
+                }
+            }
+        }
+    }
+
+    // Fallback: direct query
     $lesson_query = new WP_Query(array(
         'post_type'      => 'lesson',
         'meta_key'       => '_tutor_course_id_for_lesson',
@@ -209,64 +248,24 @@ function qimah_get_course_first_lesson_url($course_id) {
         'order'          => 'ASC',
         'post_status'    => 'publish',
     ));
-    
     if ($lesson_query->have_posts()) {
-        return get_permalink($lesson_query->posts[0]->ID);
+        $url = get_permalink($lesson_query->posts[0]->ID);
+        wp_reset_postdata();
+        return $url;
     }
     wp_reset_postdata();
-
-    // Method 2: Try via topics
-    $topics = tutor_utils()->get_course_topics($course_id);
-    if (is_array($topics) && !empty($topics)) {
-        foreach ($topics as $topic) {
-            $topic_id = isset($topic->comment_ID) ? $topic->comment_ID : $topic->ID;
-            $lessons = tutor_lessons()->get_lessons_by_topic($topic_id);
-            $lessons = is_array($lessons) ? $lessons : array();
-            if (!empty($lessons)) {
-                return get_permalink($lessons[0]->ID);
-            }
-        }
-    }
 
     return get_permalink($course_id);
 }
 
-/* ---------- Helper: Get All Lessons for a Course ---------- */
-function qimah_get_course_lessons($course_id) {
-    $all_lessons = array();
-    
-    // Direct query
-    $lesson_query = new WP_Query(array(
-        'post_type'      => 'lesson',
-        'meta_key'       => '_tutor_course_id_for_lesson',
-        'meta_value'     => $course_id,
-        'posts_per_page' => 200,
-        'orderby'        => 'menu_order date',
-        'order'          => 'ASC',
-        'post_status'    => 'publish',
-    ));
-    
-    if ($lesson_query->have_posts()) {
-        foreach ($lesson_query->posts as $post) {
-            $all_lessons[] = $post;
-        }
-    }
-    wp_reset_postdata();
-    
-    return $all_lessons;
-}
-
-/* ---------- Helper: Check if user is enrolled ---------- */
+/**
+ * Check if user is enrolled in a course
+ */
 function qimah_is_user_enrolled($course_id, $user_id = null) {
     if (!$user_id) $user_id = get_current_user_id();
     if (!$user_id) return false;
     if (!function_exists('tutor_utils')) return false;
-    try {
-        $result = tutor_utils()->is_enrolled($course_id, $user_id);
-        return !empty($result);
-    } catch (Exception $e) {
-        return false;
-    }
+    return tutor_utils()->is_enrolled($course_id, $user_id);
 }
 
 /* ---------- AJAX ---------- */
