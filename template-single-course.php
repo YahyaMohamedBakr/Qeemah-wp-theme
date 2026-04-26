@@ -58,25 +58,29 @@ get_template_part('template-parts/page-banner');
                         <h2 class="course-section-title"><i class="fas fa-list-ol"></i> المنهج الدراسي</h2>
                         <div class="curriculum-accordion">
                             <?php
-                            // Method 1: Get lessons via direct query
                             $course_topics = array();
+                            $cid = get_the_ID();
                             if (function_exists('tutor_utils')) {
-                                $raw_topics = tutor_utils()->get_course_topics(get_the_ID());
-                                if (is_array($raw_topics) && !empty($raw_topics)) {
-                                    foreach ($raw_topics as $tp) {
-                                        $tp_id = isset($tp->comment_ID) ? $tp->comment_ID : $tp->ID;
-                                        $tp_lessons = tutor_lessons()->get_lessons_by_topic($tp_id);
-                                        $tp_lessons = is_array($tp_lessons) ? $tp_lessons : array();
-                                        $course_topics[] = array(
-                                            'title'   => $tp->post_title,
-                                            'lessons' => $tp_lessons,
-                                        );
+                                try {
+                                    $raw_topics = tutor_utils()->get_course_topics($cid);
+                                    if (is_array($raw_topics) && !empty($raw_topics)) {
+                                        foreach ($raw_topics as $tp) {
+                                            $tp_id = isset($tp->comment_ID) ? $tp->comment_ID : $tp->ID;
+                                            $tp_lessons = array();
+                                            if (function_exists('tutor_lessons')) {
+                                                $tp_lessons = tutor_lessons()->get_lessons_by_topic($tp_id);
+                                                $tp_lessons = is_array($tp_lessons) ? $tp_lessons : array();
+                                            }
+                                            $course_topics[] = array(
+                                                'title'   => $tp->post_title,
+                                                'lessons' => $tp_lessons,
+                                            );
+                                        }
                                     }
-                                }
+                                } catch (Exception $e) {}
                             }
-                            // Fallback: if no topics, get all lessons directly
                             if (empty($course_topics)) {
-                                $direct_lessons = qimah_get_course_lessons(get_the_ID());
+                                $direct_lessons = qimah_get_course_lessons($cid);
                                 if (!empty($direct_lessons)) {
                                     $course_topics[] = array(
                                         'title'   => 'الدروس',

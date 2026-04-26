@@ -260,10 +260,13 @@ function qimah_get_course_lessons($course_id) {
 function qimah_is_user_enrolled($course_id, $user_id = null) {
     if (!$user_id) $user_id = get_current_user_id();
     if (!$user_id) return false;
-    if (function_exists('tutor_utils')) {
-        return tutor_utils()->is_enrolled($course_id, $user_id);
+    if (!function_exists('tutor_utils')) return false;
+    try {
+        $result = tutor_utils()->is_enrolled($course_id, $user_id);
+        return !empty($result);
+    } catch (Exception $e) {
+        return false;
     }
-    return false;
 }
 
 /* ---------- AJAX ---------- */
