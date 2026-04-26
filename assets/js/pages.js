@@ -141,6 +141,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // ============ TUTOR LMS ENROLLMENT ============
+    const enrollBtn = document.getElementById('qimahEnrollBtn');
+    if (enrollBtn) {
+        enrollBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const btn = this;
+            const courseId = btn.dataset.courseId;
+            
+            if (!courseId) return;
+            
+            // Show loading state
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التسجيل...';
+            btn.style.pointerEvents = 'none';
+            
+            // Use Tutor LMS enrollment AJAX
+            if (typeof jQuery !== 'undefined' && jQuery.ajax) {
+                jQuery.ajax({
+                    url: qimah_ajax.ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'tutor_enroll_in_course',
+                        course_id: courseId,
+                        _wpnonce: btn.dataset.nonce || qimah_ajax.nonce
+                    },
+                    success: function(response) {
+                        if (response.success || response.data) {
+                            btn.innerHTML = '<i class="fas fa-check"></i> تم التسجيل بنجاح!';
+                            btn.classList.add('enrolled');
+                            btn.style.pointerEvents = '';
+                            // Redirect to first lesson after a brief delay
+                            setTimeout(() => {
+                                window.location.href = btn.href;
+                            }, 1000);
+                        } else {
+                            btn.innerHTML = originalText;
+                            btn.style.pointerEvents = '';
+                            alert('حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.');
+                        }
+                    },
+                    error: function() {
+                        btn.innerHTML = originalText;
+                        btn.style.pointerEvents = '';
+                        alert('حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.');
+                    }
+                });
+            } else {
+                // Fallback: redirect to the course page (Tutor LMS will handle enrollment)
+                window.location.href = btn.href;
+            }
+        });
+    }
+
     // ============ AOS INIT ============
     if (typeof AOS !== 'undefined') {
         AOS.init({

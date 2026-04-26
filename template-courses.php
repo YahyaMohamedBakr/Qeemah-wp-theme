@@ -52,7 +52,11 @@ get_template_part('template-parts/page-banner');
             </div>
 
             <!-- Sidebar -->
-            <?php get_sidebar('sidebar-courses'); ?>
+            <?php if (is_active_sidebar('sidebar-courses')) : ?>
+            <aside class="archive-sidebar">
+                <?php dynamic_sidebar('sidebar-courses'); ?>
+            </aside>
+            <?php endif; ?>
         </div>
     </div>
 </main>

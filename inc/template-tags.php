@@ -78,7 +78,10 @@ function qimah_course_card($post_id = null) {
     $price = get_post_meta($post_id, '_tutor_course_price', true);
     $is_free = ($price === '' || $price === '0');
     $course_level = get_post_meta($post_id, '_tutor_course_level', true);
-    $lessons_count = tutor_utils()->get_lesson_count_by_course($post_id);
+    $lessons_count = 0;
+    if (function_exists('tutor_utils')) {
+        $lessons_count = intval(tutor_utils()->get_lesson_count_by_course($post_id));
+    }
     ?>
     <div class="course-card" data-aos="fade-up">
         <div class="course-image">

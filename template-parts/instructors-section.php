@@ -11,7 +11,7 @@
             <p class="section-desc center">مدربون معتمدون بخبرات عملية وأكاديمية واسعة يشاركونك المعرفة والخبرة</p>
         </div>
         <div class="instructors-grid">
-            <?php if (function_exists('tutor') && post_type_exists('tutor_courses')) :
+            <?php if (function_exists('tutor') && post_type_exists('courses')) :
                 $instructor_query = new WP_Query(array('role__in' => tutor()->instructor_role, 'number' => 4, 'orderby' => 'registered', 'order' => 'DESC'));
                 if ($instructor_query->have_posts()) :
                     while ($instructor_query->have_posts()) : $instructor_query->the_post();
@@ -30,7 +30,7 @@
                             <h3 class="instructor-name"><?php the_author(); ?></h3>
                             <p class="instructor-role"><?php echo esc_html(get_the_author_meta('description') ?: 'مدرب معتمد'); ?></p>
                             <div class="instructor-stats">
-                                <span><i class="fas fa-book"></i> <?php echo count_user_posts($author_id, 'tutor_courses'); ?> دورة</span>
+                                <span><i class="fas fa-book"></i> <?php echo count_user_posts($author_id, 'courses'); ?> دورة</span>
                                 <span><i class="fas fa-users"></i> متدرب</span>
                             </div>
                         </div>

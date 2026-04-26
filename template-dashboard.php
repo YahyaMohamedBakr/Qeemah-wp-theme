@@ -19,15 +19,18 @@ if (!in_array($active_tab, $valid_tabs)) $active_tab = 'courses';
 $enrolled_courses = array();
 if (function_exists('tutor_utils')) {
     $enrolled_courses_ids = tutor_utils()->get_enrolled_courses_by_user($user_id);
-    foreach ($enrolled_courses_ids as $course_obj) {
-        $cid = $course_obj->ID;
-        $enrolled_courses[] = array(
-            'id'        => $cid,
-            'title'     => get_the_title($cid),
-            'permalink' => get_permalink($cid),
-            'thumbnail' => get_the_post_thumbnail_url($cid, 'course-thumb'),
-            'progress'  => tutor_utils()->get_course_completed_percent($cid, $user_id),
-        );
+    if (is_array($enrolled_courses_ids)) {
+        foreach ($enrolled_courses_ids as $course_obj) {
+            $cid = $course_obj->ID;
+            $progress = tutor_utils()->get_course_completed_percent($cid, $user_id);
+            $enrolled_courses[] = array(
+                'id'        => $cid,
+                'title'     => get_the_title($cid),
+                'permalink' => get_permalink($cid),
+                'thumbnail' => get_the_post_thumbnail_url($cid, 'course-thumb'),
+                'progress'  => is_numeric($progress) ? $progress : 0,
+            );
+        }
     }
 }
 
@@ -204,7 +207,8 @@ get_header();
                                         </div>
                                     </div>
                                 </div>
-                                <a href="<?php echo esc_url($course['permalink']); ?>" class="dashboard-course-btn">
+                                <?php $lesson_url = qimah_get_course_first_lesson_url($course['id']); ?>
+                                <a href="<?php echo esc_url($lesson_url); ?>" class="dashboard-course-btn">
                                     <?php if (intval($course['progress']) >= 100) : ?>
                                         <i class="fas fa-redo"></i> مراجعة الدورة
                                     <?php else : ?>

@@ -179,16 +179,91 @@ require_once QIMAH_DIR . '/inc/template-tags.php';
 if (function_exists('tutor')) {
     add_filter('template_include', 'qimah_tutor_template', 99);
     function qimah_tutor_template($template) {
-        if (get_post_type() === 'tutor_courses') {
+        if (is_post_type_archive('courses')) {
             $new = QIMAH_DIR . '/template-courses.php';
             if (file_exists($new)) return $new;
         }
-        if (is_singular('tutor_courses')) {
+        if (is_singular('courses')) {
             $new = QIMAH_DIR . '/template-single-course.php';
+            if (file_exists($new)) return $new;
+        }
+        if (is_singular('lesson')) {
+            $new = QIMAH_DIR . '/template-single-lesson.php';
             if (file_exists($new)) return $new;
         }
         return $template;
     }
+}
+
+/* ---------- Helper: Get First Lesson URL ---------- */
+function qimah_get_course_first_lesson_url($course_id) {
+    if (!function_exists('tutor_utils')) return get_permalink($course_id);
+    
+    // Method 1: Direct query for lessons linked to this course
+    $lesson_query = new WP_Query(array(
+        'post_type'      => 'lesson',
+        'meta_key'       => '_tutor_course_id_for_lesson',
+        'meta_value'     => $course_id,
+        'posts_per_page' => 1,
+        'orderby'        => 'menu_order date',
+        'order'          => 'ASC',
+        'post_status'    => 'publish',
+    ));
+    
+    if ($lesson_query->have_posts()) {
+        return get_permalink($lesson_query->posts[0]->ID);
+    }
+    wp_reset_postdata();
+
+    // Method 2: Try via topics
+    $topics = tutor_utils()->get_course_topics($course_id);
+    if (is_array($topics) && !empty($topics)) {
+        foreach ($topics as $topic) {
+            $topic_id = isset($topic->comment_ID) ? $topic->comment_ID : $topic->ID;
+            $lessons = tutor_lessons()->get_lessons_by_topic($topic_id);
+            $lessons = is_array($lessons) ? $lessons : array();
+            if (!empty($lessons)) {
+                return get_permalink($lessons[0]->ID);
+            }
+        }
+    }
+
+    return get_permalink($course_id);
+}
+
+/* ---------- Helper: Get All Lessons for a Course ---------- */
+function qimah_get_course_lessons($course_id) {
+    $all_lessons = array();
+    
+    // Direct query
+    $lesson_query = new WP_Query(array(
+        'post_type'      => 'lesson',
+        'meta_key'       => '_tutor_course_id_for_lesson',
+        'meta_value'     => $course_id,
+        'posts_per_page' => 200,
+        'orderby'        => 'menu_order date',
+        'order'          => 'ASC',
+        'post_status'    => 'publish',
+    ));
+    
+    if ($lesson_query->have_posts()) {
+        foreach ($lesson_query->posts as $post) {
+            $all_lessons[] = $post;
+        }
+    }
+    wp_reset_postdata();
+    
+    return $all_lessons;
+}
+
+/* ---------- Helper: Check if user is enrolled ---------- */
+function qimah_is_user_enrolled($course_id, $user_id = null) {
+    if (!$user_id) $user_id = get_current_user_id();
+    if (!$user_id) return false;
+    if (function_exists('tutor_utils')) {
+        return tutor_utils()->is_enrolled($course_id, $user_id);
+    }
+    return false;
 }
 
 /* ---------- AJAX ---------- */

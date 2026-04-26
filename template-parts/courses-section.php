@@ -4,8 +4,8 @@
  */
 $courses_count = get_theme_mod('qimah_courses_count', 6);
 $courses = array();
-if (post_type_exists('tutor_courses')) {
-    $courses = get_posts(array('post_type' => 'tutor_courses', 'posts_per_page' => $courses_count, 'post_status' => 'publish'));
+if (post_type_exists('courses')) {
+    $courses = get_posts(array('post_type' => 'courses', 'posts_per_page' => $courses_count, 'post_status' => 'publish'));
 }
 ?>
 <section class="courses" id="courses">
@@ -24,12 +24,12 @@ if (post_type_exists('tutor_courses')) {
         <div class="courses-grid">
             <?php if (!empty($courses)) : foreach ($courses as $course) : qimah_course_card($course->ID); endforeach; else : ?>
                 <div class="section-desc center" style="grid-column:1/-1;padding:40px 0;">
-                    <p>قم بتفعيل بلاجين Tutor LMS وإضافة دورات من <a href="<?php echo esc_url(admin_url('post-new.php?post_type=tutor_courses')); ?>">هنا</a></p>
+                    <p>قم بتفعيل بلاجين Tutor LMS وإضافة دورات من <a href="<?php echo esc_url(admin_url('post-new.php?post_type=courses')); ?>">هنا</a></p>
                 </div>
             <?php endif; ?>
         </div>
         <div class="section-action" data-aos="fade-up">
-            <a href="<?php echo esc_url(home_url('/') . '?post_type=tutor_courses'); ?>" class="btn btn-primary btn-lg">
+            <a href="<?php echo esc_url(get_post_type_archive_link('courses')); ?>" class="btn btn-primary btn-lg">
                 <span>عرض جميع الدورات</span>
                 <i class="fas fa-arrow-left"></i>
             </a>
