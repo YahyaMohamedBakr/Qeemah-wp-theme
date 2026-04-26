@@ -32,6 +32,15 @@
     position: relative;
     overflow: hidden;
 }
+/* Push below admin bar when logged in */
+body.admin-bar .page-banner {
+    padding-top: 192px;
+}
+@media (max-width: 782px) {
+    body.admin-bar .page-banner {
+        padding-top: 206px;
+    }
+}
 .page-banner::after {
     content: '';
     position: absolute;
@@ -489,6 +498,15 @@
     padding: 140px 0 60px;
     position: relative;
     overflow: hidden;
+}
+/* Push below admin bar when logged in */
+body.admin-bar .dashboard-banner {
+    padding-top: 172px;
+}
+@media (max-width: 782px) {
+    body.admin-bar .dashboard-banner {
+        padding-top: 186px;
+    }
 }
 .dashboard-banner-shapes { position: absolute; inset: 0; pointer-events: none; }
 .dashboard-banner-content {

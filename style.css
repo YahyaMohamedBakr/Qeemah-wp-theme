@@ -357,6 +357,17 @@ select {
     padding: 16px 0;
 }
 
+/* Push header below WordPress admin bar when logged in */
+body.admin-bar .header {
+    top: 32px;
+}
+
+@media (max-width: 782px) {
+    body.admin-bar .header {
+        top: 46px;
+    }
+}
+
 .header.scrolled {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
@@ -546,6 +557,16 @@ select {
     background: var(--gradient-hero);
     padding: 120px 0 80px;
     overflow: hidden;
+}
+
+/* Add extra top padding when WordPress admin bar is visible */
+body.admin-bar .hero {
+    padding-top: 152px;
+}
+@media (max-width: 782px) {
+    body.admin-bar .hero {
+        padding-top: 166px;
+    }
 }
 
 .hero-bg-shapes {
