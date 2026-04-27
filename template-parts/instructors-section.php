@@ -35,31 +35,33 @@ $instructor_query = new WP_Query(array(
                     $avatar_url = QIMAH_URI . '/assets/images/default-avatar.png';
                 }
             ?>
-                <div class="instructor-card" data-aos="fade-up">
-                    <div class="instructor-avatar">
-                        <img src="<?php echo esc_url($avatar_url); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-full);">
-                        <?php if ($linkedin || $twitter || $email) : ?>
-                        <div class="instructor-social">
-                            <?php if ($linkedin) : ?><a href="<?php echo esc_url($linkedin); ?>" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a><?php endif; ?>
-                            <?php if ($twitter) : ?><a href="<?php echo esc_url($twitter); ?>" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a><?php endif; ?>
-                            <?php if ($email) : ?><a href="mailto:<?php echo esc_attr($email); ?>"><i class="fas fa-envelope"></i></a><?php endif; ?>
+                <a href="<?php echo esc_url(get_permalink()); ?>" class="instructor-card-link" data-aos="fade-up">
+                    <div class="instructor-card">
+                        <div class="instructor-avatar">
+                            <img src="<?php echo esc_url($avatar_url); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-full);">
+                            <?php if ($linkedin || $twitter || $email) : ?>
+                            <div class="instructor-social" onclick="event.stopPropagation();">
+                                <?php if ($linkedin) : ?><a href="<?php echo esc_url($linkedin); ?>" target="_blank" rel="noopener" onclick="event.stopPropagation();"><i class="fab fa-linkedin-in"></i></a><?php endif; ?>
+                                <?php if ($twitter) : ?><a href="<?php echo esc_url($twitter); ?>" target="_blank" rel="noopener" onclick="event.stopPropagation();"><i class="fab fa-twitter"></i></a><?php endif; ?>
+                                <?php if ($email) : ?><a href="mailto:<?php echo esc_attr($email); ?>" onclick="event.stopPropagation();"><i class="fas fa-envelope"></i></a><?php endif; ?>
+                            </div>
+                            <?php endif; ?>
                         </div>
-                        <?php endif; ?>
+                        <h3 class="instructor-name"><?php the_title(); ?></h3>
+                        <p class="instructor-role"><?php echo esc_html($specialization ?: get_the_excerpt()); ?></p>
+                        <div class="instructor-stats">
+                            <?php if ($courses_count) : ?>
+                                <span><i class="fas fa-book"></i> <?php echo intval($courses_count); ?> دورة</span>
+                            <?php endif; ?>
+                            <?php if ($students_count) : ?>
+                                <span><i class="fas fa-users"></i> <?php echo intval($students_count); ?> متدرب</span>
+                            <?php endif; ?>
+                            <?php if ($rating) : ?>
+                                <span><i class="fas fa-star"></i> <?php echo esc_html($rating); ?></span>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                    <h3 class="instructor-name"><?php the_title(); ?></h3>
-                    <p class="instructor-role"><?php echo esc_html($specialization ?: get_the_excerpt()); ?></p>
-                    <div class="instructor-stats">
-                        <?php if ($courses_count) : ?>
-                            <span><i class="fas fa-book"></i> <?php echo intval($courses_count); ?> دورة</span>
-                        <?php endif; ?>
-                        <?php if ($students_count) : ?>
-                            <span><i class="fas fa-users"></i> <?php echo intval($students_count); ?> متدرب</span>
-                        <?php endif; ?>
-                        <?php if ($rating) : ?>
-                            <span><i class="fas fa-star"></i> <?php echo esc_html($rating); ?></span>
-                        <?php endif; ?>
-                    </div>
-                </div>
+                </a>
             <?php endwhile; wp_reset_postdata(); ?>
         </div>
         <?php else : ?>

@@ -2212,3 +2212,375 @@ body.tutor-dashboard-page .tutor-dashboard-permalinks a:hover {
     .dashboard-course-card { flex-direction: column; }
     .dashboard-course-img { width: 100%; height: 140px; }
 }
+
+/* ============ SINGLE INSTRUCTOR PROFILE PAGE ============ */
+.instructor-profile-section {
+    padding: 60px 0 80px;
+    margin-top: -30px;
+    position: relative;
+    z-index: 10;
+}
+
+.instructor-profile-layout {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+/* Sidebar Card */
+.instructor-profile-sidebar {
+    position: sticky;
+    top: 100px;
+}
+
+.instructor-profile-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+    text-align: center;
+}
+
+.instructor-profile-avatar-wrap {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    background: var(--gradient-hero);
+}
+
+.instructor-profile-avatar-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.instructor-profile-badge {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    background: var(--gradient-gold);
+    color: var(--white);
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.instructor-profile-badge i { font-size: 0.8rem; }
+
+.instructor-profile-info {
+    padding: 24px 24px 0;
+}
+
+.instructor-profile-info h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 6px;
+}
+
+.instructor-profile-spec {
+    font-size: 0.92rem;
+    color: var(--primary);
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+/* Stats Row */
+.instructor-profile-stats {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 20px 0;
+    border-top: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+    margin-top: 20px;
+}
+
+.instructor-profile-stat {
+    flex: 1;
+    text-align: center;
+    padding: 0 8px;
+}
+
+.instructor-profile-stat + .instructor-profile-stat {
+    border-right: 1px solid var(--gray-200);
+}
+
+.instructor-profile-stat-number {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--dark);
+    line-height: 1.2;
+}
+
+.instructor-profile-stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Social Buttons */
+.instructor-profile-social {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px 24px;
+}
+
+.instructor-social-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    color: var(--white);
+    transition: var(--transition-base);
+}
+
+.instructor-social-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.instructor-social-btn.linkedin { background: #0077b5; }
+.instructor-social-btn.twitter { background: #1da1f2; }
+.instructor-social-btn.email { background: var(--gradient-primary); }
+
+/* Contact Button */
+.instructor-contact-btn {
+    display: block;
+    margin: 0 24px 24px;
+    padding: 14px 20px;
+    text-align: center;
+    background: var(--gradient-primary);
+    color: var(--white);
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-primary);
+}
+
+.instructor-contact-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(32,144,176,0.35);
+    color: var(--white);
+}
+
+/* Main Content Blocks */
+.instructor-profile-main {
+    min-width: 0;
+}
+
+.instructor-profile-block {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    padding: 28px;
+    margin-bottom: 24px;
+}
+
+.instructor-profile-block:last-of-type {
+    margin-bottom: 24px;
+}
+
+.instructor-profile-block-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--primary-lighter);
+}
+
+.instructor-profile-block-header i {
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+/* Bio Content */
+.instructor-profile-bio {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 2;
+}
+
+.instructor-profile-bio p { margin-bottom: 16px; }
+.instructor-profile-bio p:last-child { margin-bottom: 0; }
+
+/* Expertise Badge */
+.instructor-profile-expertise {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.instructor-expertise-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--primary-lighter);
+    color: var(--primary);
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.instructor-expertise-badge i { font-size: 0.8rem; }
+
+/* Achievements Grid */
+.instructor-profile-achievements {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.instructor-achievement-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    transition: var(--transition-base);
+}
+
+.instructor-achievement-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.instructor-achievement-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.instructor-achievement-text { display: flex; flex-direction: column; }
+.instructor-achievement-number {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1.2;
+}
+
+.instructor-achievement-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+/* Contact Links List */
+.instructor-profile-links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.instructor-link-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    text-decoration: none;
+    transition: var(--transition-base);
+}
+
+.instructor-link-item:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-sm);
+    background: var(--white);
+}
+
+.instructor-link-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.instructor-link-text { flex: 1; min-width: 0; }
+.instructor-link-label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.instructor-link-value {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.instructor-link-arrow {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    transition: var(--transition-base);
+}
+
+.instructor-link-item:hover .instructor-link-arrow {
+    color: var(--primary);
+    transform: translateX(-4px);
+}
+
+/* Back Button */
+.instructor-profile-back {
+    margin-top: 8px;
+}
+
+.instructor-profile-back .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .instructor-profile-layout {
+        grid-template-columns: 1fr;
+    }
+    .instructor-profile-sidebar {
+        position: static;
+        max-width: 480px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .instructor-profile-section { padding: 40px 0 60px; }
+    .instructor-profile-block { padding: 20px; }
+    .instructor-profile-achievements { grid-template-columns: 1fr; }
+    .instructor-profile-avatar-wrap { height: 220px; }
+}

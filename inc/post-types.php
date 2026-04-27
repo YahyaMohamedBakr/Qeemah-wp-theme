@@ -26,13 +26,15 @@ function qimah_register_instructor_cpt() {
 
     register_post_type('qimah_instructor', array(
         'labels'       => $labels,
-        'public'       => false,
+        'public'       => true,
+        'publicly_queryable' => true,
         'show_ui'      => true,
         'show_in_menu' => true,
+        'show_in_rest' => false,
         'menu_icon'    => 'dashicons-welcome-learn-more',
         'menu_position'=> 25,
         'supports'     => array('title', 'editor', 'thumbnail'),
-        'rewrite'      => false,
+        'rewrite'      => array('slug' => 'instructor', 'with_front' => false),
         'has_archive'  => false,
     ));
 }

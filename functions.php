@@ -176,6 +176,12 @@ require_once QIMAH_DIR . '/inc/customizer.php';
 require_once QIMAH_DIR . '/inc/template-tags.php';
 require_once QIMAH_DIR . '/inc/post-types.php';
 
+/* ---------- Flush Rewrite Rules on Theme Switch/Activate ---------- */
+function qimah_flush_rewrite() {
+    flush_rewrite_rules();
+}
+add_action('after_switch_theme', 'qimah_flush_rewrite');
+
 /* ---------- Tutor LMS Integration ----------
  * Following Edubin's approach:
  * - We override Tutor LMS templates via the tutor/ folder in theme root
