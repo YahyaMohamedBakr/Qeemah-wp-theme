@@ -56,6 +56,8 @@ function qimah_customize_register($wp_customize) {
     }
     $wp_customize->add_setting('qimah_courses_count', array('default' => 6, 'sanitize_callback' => 'absint'));
     $wp_customize->add_control('qimah_courses_count', array('label' => 'عدد الدورات في الرئيسية', 'section' => 'qimah_homepage', 'type' => 'number'));
+    $wp_customize->add_setting('qimah_instructors_count', array('default' => 8, 'sanitize_callback' => 'absint'));
+    $wp_customize->add_control('qimah_instructors_count', array('label' => 'عدد المدربين المعروضين', 'section' => 'qimah_homepage', 'type' => 'number', 'description' => 'عدد المدربين الذين يظهرون في قسم المدربين على الرئيسية'));
 
     // ===== CONTACT =====
     $wp_customize->add_section('qimah_contact', array('title' => 'معلومات التواصل', 'priority' => 35));

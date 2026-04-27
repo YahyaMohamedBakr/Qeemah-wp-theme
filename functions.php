@@ -171,9 +171,10 @@ add_filter('excerpt_length', 'qimah_excerpt_length');
 function qimah_excerpt_more($more) { return '...'; }
 add_filter('excerpt_more', 'qimah_excerpt_more');
 
-/* ---------- Include Customizer & Template Tags ---------- */
+/* ---------- Include Customizer, Template Tags & Post Types ---------- */
 require_once QIMAH_DIR . '/inc/customizer.php';
 require_once QIMAH_DIR . '/inc/template-tags.php';
+require_once QIMAH_DIR . '/inc/post-types.php';
 
 /* ---------- Tutor LMS Integration ----------
  * Following Edubin's approach:

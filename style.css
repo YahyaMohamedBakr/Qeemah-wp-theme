@@ -1304,7 +1304,7 @@ body.admin-bar .hero {
 
 .instructors-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 28px;
 }
 
@@ -1501,6 +1501,21 @@ body.admin-bar .hero {
     background: var(--primary);
     width: 28px;
     border-radius: var(--radius-full);
+}
+
+/* Static testimonials grid (when 3 or fewer testimonials) */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+/* Instructor stats responsive */
+.instructor-stats {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 /* ============ CTA SECTION ============ */
@@ -1916,7 +1931,7 @@ body.admin-bar .hero {
     }
 
     .instructors-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
     }
 
     .footer-grid {
@@ -2012,6 +2027,10 @@ body.admin-bar .hero {
     }
 
     .instructors-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .testimonials-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -2082,6 +2101,10 @@ body.admin-bar .hero {
     }
 
     .instructors-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .testimonials-grid {
         grid-template-columns: 1fr;
     }
 
