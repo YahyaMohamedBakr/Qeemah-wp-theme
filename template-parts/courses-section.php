@@ -24,7 +24,7 @@ if (post_type_exists('courses')) {
         <div class="courses-grid">
             <?php if (!empty($courses)) : foreach ($courses as $course) : qimah_course_card($course->ID); endforeach; else : ?>
                 <div class="section-desc center" style="grid-column:1/-1;padding:40px 0;">
-                    <p>قم بتفعيل بلاجين Tutor LMS وإضافة دورات من <a href="<?php echo esc_url(admin_url('post-new.php?post_type=courses')); ?>">هنا</a></p>
+                    <p> سيتم إضافة الدورات قريباً بإذن الله</p>
                 </div>
             <?php endif; ?>
         </div>
