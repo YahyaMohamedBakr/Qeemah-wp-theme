@@ -41,13 +41,10 @@ add_filter('content_width', 'qimah_content_width');
 
 /* ---------- Widget Areas ---------- */
 function qimah_widgets_init() {
+    // Sidebar areas (generic wrappers)
     $sidebars = array(
-        'sidebar-courses'     => 'شريط جانبي - الدورات',
-        'sidebar-single-course' => 'شريط جانبي - الدورة',
-        'footer-1'            => 'فوتر - عمود 1',
-        'footer-2'            => 'فوتر - عمود 2',
-        'footer-3'            => 'فوتر - عمود 3',
-        'footer-4'            => 'فوتر - عمود 4',
+        'sidebar-courses'      => 'شريط جانبي - الدورات',
+        'sidebar-single-course'=> 'شريط جانبي - الدورة',
     );
     foreach ($sidebars as $id => $name) {
         register_sidebar(array(
@@ -57,6 +54,18 @@ function qimah_widgets_init() {
             'after_widget'  => '</div>',
             'before_title'  => '<h3 class="sidebar-widget-title"><i class="fas fa-cog"></i>',
             'after_title'   => '</h3>',
+        ));
+    }
+
+    // Footer widget areas (footer-specific wrappers)
+    for ($i = 1; $i <= 4; $i++) {
+        register_sidebar(array(
+            'name'          => sprintf('فوتر - عمود %d', $i),
+            'id'            => 'footer-' . $i,
+            'before_widget' => '<div id="%1$s" class="footer-widget %2$s">',
+            'after_widget'  => '</div>',
+            'before_title'  => '<h4 class="footer-heading">',
+            'after_title'   => '</h4>',
         ));
     }
 }

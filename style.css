@@ -1852,6 +1852,108 @@ body.admin-bar .hero {
     color: var(--text-muted);
 }
 
+/* ============ FOOTER WIDGETS ============ */
+.footer-widget {
+    margin-bottom: 16px;
+}
+.footer-widget:last-child {
+    margin-bottom: 0;
+}
+/* Widget titles already use .footer-heading via register_sidebar */
+/* Widget lists — match .footer-links style */
+.footer-widget ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.footer-widget ul li {
+    margin-bottom: 10px;
+}
+.footer-widget ul li:last-child {
+    margin-bottom: 0;
+}
+.footer-widget ul li a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.footer-widget ul li a:hover {
+    color: var(--secondary);
+    padding-right: 6px;
+}
+/* Widget text / HTML */
+.footer-widget p,
+.footer-widget .textwidget {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    line-height: 1.8;
+}
+.footer-widget a {
+    color: var(--text-light);
+    transition: var(--transition-base);
+}
+.footer-widget a:hover {
+    color: var(--secondary);
+}
+/* Widget images in footer */
+.footer-widget img {
+    max-width: 100%;
+    height: auto;
+}
+/* WordPress nav menu widget inside footer */
+.footer-widget .menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.footer-widget .menu li {
+    margin-bottom: 10px;
+}
+.footer-widget .menu li a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.footer-widget .menu li a:hover {
+    color: var(--secondary);
+    padding-right: 6px;
+}
+/* Search widget in footer */
+.footer-widget .search-form {
+    display: flex;
+    gap: 0;
+}
+.footer-widget .search-form input[type="search"] {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-left: none;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    background: rgba(255,255,255,0.08);
+    color: var(--white);
+    font-size: 0.85rem;
+}
+.footer-widget .search-form input[type="search"]::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+.footer-widget .search-form button[type="submit"] {
+    padding: 10px 16px;
+    background: var(--gradient-primary);
+    color: var(--white);
+    border: 1px solid var(--primary);
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
 /* ============ BACK TO TOP ============ */
 .back-to-top {
     position: fixed;
