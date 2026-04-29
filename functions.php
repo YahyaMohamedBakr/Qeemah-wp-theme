@@ -244,12 +244,16 @@ function qimah_get_course_first_lesson_url($course_id) {
     if (is_array($topics) && !empty($topics)) {
         foreach ($topics as $topic) {
             $topic_id = isset($topic->comment_ID) ? $topic->comment_ID : $topic->ID;
-            if (function_exists('tutor_lessons')) {
-                $lessons = tutor_lessons()->get_lessons_by_topic($topic_id);
-                $lessons = is_array($lessons) ? $lessons : array();
-                if (!empty($lessons)) {
-                    return get_permalink($lessons[0]->ID);
-                }
+            $lessons = get_posts(array(
+                'post_type'      => 'lesson',
+                'post_parent'    => $topic_id,
+                'post_status'    => 'publish',
+                'posts_per_page' => 1,
+                'orderby'        => 'menu_order',
+                'order'          => 'ASC',
+            ));
+            if (!empty($lessons)) {
+                return get_permalink($lessons[0]->ID);
             }
         }
     }

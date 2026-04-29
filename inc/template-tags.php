@@ -75,8 +75,9 @@ function qimah_course_card($post_id = null) {
     $excerpt = get_the_excerpt($post_id);
     $permalink = get_permalink($post_id);
     $thumb = get_the_post_thumbnail_url($post_id, 'course-thumb');
+    $price_type = get_post_meta($post_id, '_tutor_course_price_type', true);
     $price = get_post_meta($post_id, '_tutor_course_price', true);
-    $is_free = ($price === '' || $price === '0');
+    $is_free = ($price_type === 'free' || ($price_type !== 'paid' && $price === ''));
     $course_level = get_post_meta($post_id, '_tutor_course_level', true);
     $lessons_count = 0;
     if (function_exists('tutor_utils')) {
