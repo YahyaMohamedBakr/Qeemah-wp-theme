@@ -18,7 +18,7 @@ function qimah_setup() {
         'flex-height' => true,
         'flex-width'  => true,
     ));
-    add_theme_support('customize-selective-refresh-widgets');
+   // add_theme_support('customize-selective-refresh-widgets');
     add_theme_support('align-wide');
     add_theme_support('responsive-embeds');
     add_theme_support('custom-background', array('default-color' => 'ffffff'));
