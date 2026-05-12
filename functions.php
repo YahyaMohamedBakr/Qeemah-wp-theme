@@ -110,6 +110,9 @@ function qimah_scripts() {
     wp_enqueue_style('aos', 'https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css', array(), '2.3.4');
     wp_enqueue_style('qimah-style', get_stylesheet_uri(), array(), QIMAH_VERSION);
     wp_enqueue_style('qimah-template-style', QIMAH_URI . '/assets/css/template-style.css', array('qimah-style'), QIMAH_VERSION);
+    if (class_exists('WooCommerce')) {
+        wp_enqueue_style('qimah-woocommerce', QIMAH_URI . '/assets/css/woocommerce.css', array('qimah-template-style'), QIMAH_VERSION);
+    }
 
     $custom_css = qimah_get_custom_css();
     if ($custom_css) {
