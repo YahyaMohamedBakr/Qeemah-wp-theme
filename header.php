@@ -67,6 +67,7 @@
                     <?php endif; ?>
                     <?php if (is_user_logged_in()) : ?>
                         <a href="<?php echo esc_url(home_url('/dashboard')); ?>" class="btn btn-primary btn-sm"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a>
+                        <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="btn btn-outline btn-sm"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
                     <?php else : ?>
                         <?php if (get_theme_mod('qimah_show_login', true)) : ?>
                             <a href="<?php echo esc_url(qimah_get_page_url_by_path('login') ?: wp_login_url()); ?>" class="btn btn-primary btn-sm">تسجيل الدخول</a>
