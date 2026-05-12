@@ -77,11 +77,23 @@ function qimah_course_card($post_id = null) {
     $thumb = get_the_post_thumbnail_url($post_id, 'course-thumb');
     $price_type = get_post_meta($post_id, '_tutor_course_price_type', true);
     $price = get_post_meta($post_id, '_tutor_course_price', true);
-    $is_free = ($price_type === 'free' || ($price_type !== 'paid' && $price === ''));
+    if (function_exists('tutor_utils')) {
+        $is_free = tutor_utils()->is_course_free($post_id);
+    } else {
+        $is_free = ($price_type === 'free');
+    }
     $course_level = get_post_meta($post_id, '_tutor_course_level', true);
-    $course_price_type = get_post_meta($post_id, '_tutor_course_price_type', true);
-    $data_category = 'recorded';
-    if ($course_price_type === 'free' || $course_price_type === '') $data_category = 'free';
+    $data_category = ($price_type === 'free') ? 'free' : 'recorded';
+    $display_price = '';
+    if (!$is_free && function_exists('tutor_utils') && tutor_utils()->is_course_purchasable($post_id)) {
+        $product_id = tutor_utils()->get_course_product_id($post_id);
+        if ($product_id && function_exists('wc_get_product')) {
+            $product = wc_get_product($product_id);
+            if ($product) {
+                $display_price = $product->get_price_html();
+            }
+        }
+    }
     $lessons_count = 0;
     if (function_exists('tutor_utils')) {
         $lessons_count = intval(tutor_utils()->get_lesson_count_by_course($post_id));
@@ -94,8 +106,14 @@ function qimah_course_card($post_id = null) {
             <?php else : ?>
                 <div class="course-img-placeholder"><i class="fas fa-graduation-cap"></i></div>
             <?php endif; ?>
-            <?php if (!$is_free && $price) : ?>
-                <div class="course-price"><span><?php echo esc_html($price); ?></span><small>ر.س</small></div>
+            <?php if (!$is_free) : ?>
+                <?php if ($display_price) : ?>
+                    <div class="course-price"><span><?php echo $display_price; ?></span></div>
+                <?php elseif ($price) : ?>
+                    <div class="course-price"><span><?php echo esc_html($price); ?></span><small>ر.س</small></div>
+                <?php else : ?>
+                    <div class="course-price"><span>مدفوعة</span></div>
+                <?php endif; ?>
             <?php else : ?>
                 <div class="course-price course-price-free"><span>مجاني</span></div>
             <?php endif; ?>
