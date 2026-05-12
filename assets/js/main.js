@@ -319,4 +319,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ============ CART BADGE UPDATE ============
+    const cartBadge = document.querySelector('.cart-badge');
+    if (cartBadge) {
+        document.body.addEventListener('added_to_cart', () => {
+            fetch(qimah_ajax.ajaxurl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'qimah_cart_count',
+                    nonce: qimah_ajax.nonce,
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const count = parseInt(data.data.count);
+                    if (count > 0) {
+                        cartBadge.textContent = count;
+                        cartBadge.style.display = '';
+                    } else {
+                        cartBadge.style.display = 'none';
+                    }
+                }
+            });
+        });
+    }
+
 });

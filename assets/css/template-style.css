@@ -12,13 +12,15 @@
     padding: 10px 0;
 }
 .header-inner-page .nav-link { color: var(--text-secondary); }
-.header-inner-page .btn-search { color: var(--text-secondary); }
+.header-inner-page .btn-search,
+.header-inner-page .btn-cart { color: var(--text-secondary); }
 .header-inner-page .nav-link:hover,
 .header-inner-page .nav-item.active .nav-link {
     color: var(--primary);
     background: var(--primary-lighter);
 }
-.header-inner-page .btn-search:hover {
+.header-inner-page .btn-search:hover,
+.header-inner-page .btn-cart:hover {
     color: var(--primary);
     background: var(--primary-lighter);
 }

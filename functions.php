@@ -28,10 +28,40 @@ function qimah_setup() {
         'footer'  => esc_html__('قائمة الفوتر', 'qimah-wa-qudwah'),
     ));
 
+    add_theme_support('woocommerce');
+
     set_post_thumbnail_size(800, 500, true);
     add_image_size('course-thumb', 600, 360, true);
     add_image_size('instructor-thumb', 200, 200, true);
 }
+
+/* ---------- Fix menu classes for primary menu ---------- */
+function qimah_nav_menu_classes($classes, $item, $args) {
+    if ($args->theme_location === 'primary') {
+        $classes[] = 'nav-item';
+        if (in_array('current-menu-item', $classes) || in_array('current_page_item', $classes)) {
+            $classes[] = 'active';
+        }
+    }
+    return $classes;
+}
+add_filter('nav_menu_css_class', 'qimah_nav_menu_classes', 10, 3);
+
+function qimah_nav_menu_link_attributes($atts, $item, $args) {
+    if ($args->theme_location === 'primary') {
+        $atts['class'] = 'nav-link';
+    }
+    return $atts;
+}
+add_filter('nav_menu_link_attributes', 'qimah_nav_menu_link_attributes', 10, 3);
+
+function qimah_nav_menu_item_id($id, $item, $args) {
+    if ($args->theme_location === 'primary') {
+        return '';
+    }
+    return $id;
+}
+add_filter('nav_menu_item_id', 'qimah_nav_menu_item_id', 10, 3);
 add_action('after_setup_theme', 'qimah_setup');
 
 function qimah_content_width() {
@@ -328,6 +358,17 @@ function qimah_handle_contact() {
 }
 
 /* ---------- AJAX ---------- */
+function qimah_cart_count_ajax() {
+    check_ajax_referer('qimah_nonce', 'nonce');
+    $count = 0;
+    if (class_exists('WooCommerce')) {
+        $count = WC()->cart->get_cart_contents_count();
+    }
+    wp_send_json_success(array('count' => $count));
+}
+add_action('wp_ajax_qimah_cart_count', 'qimah_cart_count_ajax');
+add_action('wp_ajax_nopriv_qimah_cart_count', 'qimah_cart_count_ajax');
+
 function qimah_newsletter_ajax() {
     check_ajax_referer('qimah_nonce', 'nonce');
     $email = sanitize_email($_POST['email'] ?? '');

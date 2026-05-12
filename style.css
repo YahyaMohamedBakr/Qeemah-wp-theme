@@ -454,6 +454,52 @@ body.admin-bar .header {
     background: var(--primary-lighter);
 }
 
+/* Cart Button */
+.btn-cart {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.85);
+    transition: var(--transition-base);
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    background: var(--secondary);
+    color: var(--white);
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-cart:hover {
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.header.scrolled .btn-cart {
+    color: var(--text-secondary);
+}
+
+.header.scrolled .btn-cart:hover {
+    color: var(--primary);
+    background: var(--primary-lighter);
+}
+
 /* Search Overlay */
 .search-overlay {
     position: absolute;

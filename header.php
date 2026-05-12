@@ -39,7 +39,7 @@
                         'theme_location' => 'primary',
                         'container'      => false,
                         'menu_class'     => 'nav-list',
-                        'items_wrap'     => '%3$s',
+                        'items_wrap'     => '<ul class="nav-list">%3$s</ul>',
                         'fallback_cb'    => function() {
                             echo '<ul class="nav-list">';
                             echo '<li class="nav-item ' . (is_front_page() ? 'active' : '') . '"><a href="' . home_url('/') . '" class="nav-link">الرئيسية</a></li>';
@@ -56,6 +56,15 @@
                 <!-- Header Actions -->
                 <div class="header-actions">
                     <button class="btn-search" id="btnSearch" aria-label="بحث"><i class="fas fa-search"></i></button>
+                    <?php if (class_exists('WooCommerce')) : ?>
+                        <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="btn-cart" aria-label="سلة التسوق">
+                            <i class="fas fa-shopping-cart"></i>
+                            <?php $cart_count = WC()->cart->get_cart_contents_count(); ?>
+                            <?php if ($cart_count > 0) : ?>
+                                <span class="cart-badge"><?php echo intval($cart_count); ?></span>
+                            <?php endif; ?>
+                        </a>
+                    <?php endif; ?>
                     <?php if (is_user_logged_in()) : ?>
                         <a href="<?php echo esc_url(home_url('/dashboard')); ?>" class="btn btn-primary btn-sm"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a>
                     <?php else : ?>
