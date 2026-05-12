@@ -48,7 +48,8 @@ $hours = get_theme_mod('qimah_working_hours', 'الأحد - الخميس | 8:00 
                 <h2 class="contact-form-heading"><i class="fas fa-paper-plane" style="color:var(--primary);margin-left:10px;"></i> أرسل لنا رسالة</h2>
                 <p class="contact-form-subtitle">نسعد بتواصلك معنا، املأ النموذج أدناه وسنرد عليك في أقرب وقت</p>
                 <?php if (function_exists('wpcf7')) : ?>
-                    <?php echo do_shortcode('[contact-form-7 id="contact-form" title="نموذج الاتصال"]'); ?>
+                    <?php $cf7_shortcode = get_theme_mod('qimah_contact_form_shortcode', '[contact-form-7 id="f0dbfc4" title="Contact form 1"]'); ?>
+                    <?php echo do_shortcode($cf7_shortcode); ?>
                 <?php else : ?>
                 <form id="contactForm" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                     <?php wp_nonce_field('qimah_contact', 'qimah_contact_nonce'); ?>

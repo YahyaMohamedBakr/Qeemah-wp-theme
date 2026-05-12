@@ -69,6 +69,8 @@ function qimah_customize_register($wp_customize) {
     $wp_customize->add_control('qimah_contact_email', array('label' => 'البريد الإلكتروني', 'section' => 'qimah_contact', 'type' => 'email'));
     $wp_customize->add_setting('qimah_working_hours', array('default' => 'الأحد - الخميس | 8:00 ص - 5:00 م', 'sanitize_callback' => 'sanitize_text_field'));
     $wp_customize->add_control('qimah_working_hours', array('label' => 'ساعات العمل', 'section' => 'qimah_contact', 'type' => 'text'));
+    $wp_customize->add_setting('qimah_contact_form_shortcode', array('default' => '[contact-form-7 id="f0dbfc4" title="Contact form 1"]', 'sanitize_callback' => 'wp_kses_post'));
+    $wp_customize->add_control('qimah_contact_form_shortcode', array('label' => 'شورت كود نموذج التواصل', 'section' => 'qimah_contact', 'type' => 'textarea', 'description' => 'أضف شورت كود Contact Form 7 أو أي شورت كود آخر'));
 
     // ===== SOCIAL =====
     $wp_customize->add_section('qimah_social', array('title' => 'وسائل التواصل', 'priority' => 36));
