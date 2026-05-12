@@ -6,7 +6,7 @@ Author URI: https://goodwaty.org.sa
 Description: ثيم ووردبريس احترافي لمركز قيمة وقدوة للتدريب - متوافق مع Tutor LMS ويدعم اللغة العربية بالكامل
 Version: 1.0.0
 Requires at least: 6.0
-Tested up to: 6.5
+Tested up to: 6.7
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -1403,6 +1403,7 @@ body.admin-bar .hero {
     display: flex;
     justify-content: center;
     gap: 16px;
+    flex-wrap: wrap;
     padding-top: 14px;
     border-top: 1px solid var(--gray-200);
 }
@@ -1513,14 +1514,6 @@ body.admin-bar .hero {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-}
-
-/* Instructor stats responsive */
-.instructor-stats {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
 }
 
 /* ============ CTA SECTION ============ */
@@ -1952,39 +1945,6 @@ body.admin-bar .hero {
     border-radius: var(--radius-sm) 0 0 var(--radius-sm);
     cursor: pointer;
     font-size: 0.85rem;
-}
-
-/* ============ BACK TO TOP ============ */
-.back-to-top {
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    width: 48px;
-    height: 48px;
-    background: var(--gradient-primary);
-    color: var(--white);
-    border-radius: var(--radius-full);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    box-shadow: var(--shadow-primary);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-    transition: var(--transition-base);
-    z-index: 999;
-}
-
-.back-to-top.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.back-to-top:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(32, 144, 176, 0.4);
 }
 
 /* ============ RESPONSIVE ============ */

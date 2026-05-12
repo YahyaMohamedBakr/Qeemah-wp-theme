@@ -48,7 +48,7 @@ function qimah_widgets_init() {
     );
     foreach ($sidebars as $id => $name) {
         register_sidebar(array(
-            'name'          => esc_html__($name, 'qimah-wa-qudwah'),
+            'name'          => esc_html($name),
             'id'            => $id,
             'before_widget' => '<div id="%1$s" class="sidebar-widget %2$s">',
             'after_widget'  => '</div>',
@@ -89,7 +89,9 @@ function qimah_scripts() {
     wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11.0.0', true);
     wp_enqueue_script('aos', 'https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js', array(), '2.3.4', true);
     wp_enqueue_script('qimah-main', QIMAH_URI . '/assets/js/main.js', array(), QIMAH_VERSION, true);
-    wp_enqueue_script('qimah-pages', QIMAH_URI . '/assets/js/pages.js', array(), QIMAH_VERSION, true);
+    if (!is_front_page()) {
+        wp_enqueue_script('qimah-pages', QIMAH_URI . '/assets/js/pages.js', array(), QIMAH_VERSION, true);
+    }
 
     if (is_page_template('template-contact.php')) {
         wp_enqueue_script('qimah-contact', QIMAH_URI . '/assets/js/contact.js', array(), QIMAH_VERSION, true);
@@ -179,6 +181,25 @@ function qimah_excerpt_length($length) { return 30; }
 add_filter('excerpt_length', 'qimah_excerpt_length');
 function qimah_excerpt_more($more) { return '...'; }
 add_filter('excerpt_more', 'qimah_excerpt_more');
+
+/* ---------- Helper: get page by path ---------- */
+function qimah_get_page_by_path($page_path) {
+    if (function_exists('get_page_by_path')) {
+        $page = get_page_by_path($page_path);
+        if ($page) return $page;
+    }
+    $pages = get_posts(array(
+        'post_type' => 'page',
+        'name'      => $page_path,
+        'post_status' => 'publish',
+        'posts_per_page' => 1,
+    ));
+    return !empty($pages) ? $pages[0] : null;
+}
+function qimah_get_page_url_by_path($page_path) {
+    $page = qimah_get_page_by_path($page_path);
+    return $page ? get_permalink($page->ID) : '';
+}
 
 /* ---------- Include Customizer, Template Tags & Post Types ---------- */
 require_once QIMAH_DIR . '/inc/customizer.php';
@@ -288,6 +309,24 @@ function qimah_is_user_enrolled($course_id, $user_id = null) {
     return tutor_utils()->is_enrolled($course_id, $user_id);
 }
 
+/* ---------- Contact Form Handler ---------- */
+add_action('admin_post_nopriv_qimah_contact', 'qimah_handle_contact');
+add_action('admin_post_qimah_contact', 'qimah_handle_contact');
+function qimah_handle_contact() {
+    if (!wp_verify_nonce($_POST['qimah_contact_nonce'] ?? '', 'qimah_contact')) {
+        wp_die('فشل التحقق الأمني');
+    }
+    $name = sanitize_text_field($_POST['name'] ?? '');
+    $email = sanitize_email($_POST['email'] ?? '');
+    $message = sanitize_textarea_field($_POST['message'] ?? '');
+    $to = get_option('admin_email');
+    $subject = 'رسالة جديدة من ' . $name;
+    $headers = array('Content-Type: text/html; charset=UTF-8', 'Reply-To: ' . $email);
+    wp_mail($to, $subject, nl2br($message), $headers);
+    wp_safe_redirect(add_query_arg('sent', 'success', wp_get_referer()));
+    exit;
+}
+
 /* ---------- AJAX ---------- */
 function qimah_newsletter_ajax() {
     check_ajax_referer('qimah_nonce', 'nonce');
@@ -329,19 +368,23 @@ function qimah_handle_profile_update() {
         update_user_meta($user_id, 'billing_phone', $phone);
     }
 
-    wp_safe_redirect(add_query_arg('tab', 'profile', get_permalink(get_page_by_path('dashboard'))));
+    wp_safe_redirect(add_query_arg('tab', 'profile', qimah_get_page_url_by_path('dashboard')));
     exit;
 }
 
 /* ---------- Redirect wp-login to custom auth ---------- */
-add_action('login_init', function() {
-    if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], 'wp-login.php') !== false && !isset($_REQUEST['action'])) {
-        $auth_page = get_page_by_path('login');
-        if ($auth_page) {
-            $redirect = isset($_REQUEST['redirect_to']) ? '?redirect_to=' . urlencode($_REQUEST['redirect_to']) : '';
-            wp_safe_redirect(get_permalink($auth_page->ID) . $redirect);
-            exit;
-        }
+add_action('init', function() {
+    if (!isset($_SERVER['REQUEST_URI'])) return;
+    if (strpos($_SERVER['REQUEST_URI'], 'wp-login.php') === false) return;
+    if (isset($_REQUEST['action']) && $_REQUEST['action'] !== '') return;
+    if (defined('DOING_AJAX') && DOING_AJAX) return;
+    if (defined('DOING_CRON') && DOING_CRON) return;
+
+    $auth_page = qimah_get_page_by_path('login');
+    if ($auth_page) {
+        $redirect = isset($_REQUEST['redirect_to']) ? '?redirect_to=' . urlencode($_REQUEST['redirect_to']) : '';
+        wp_safe_redirect(get_permalink($auth_page->ID) . $redirect);
+        exit;
     }
 });
 

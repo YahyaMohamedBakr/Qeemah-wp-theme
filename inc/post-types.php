@@ -215,10 +215,14 @@ add_action('save_post_qimah_testimonial', 'qimah_save_testimonial_meta');
    Helper: Generate star rating HTML
    ======================================================================== */
 function qimah_star_rating_html($rating = 5) {
-    $rating = max(1, min(5, intval($rating)));
+    $rating = max(0, min(5, intval($rating)));
     $html = '';
     for ($i = 1; $i <= 5; $i++) {
-        $html .= '<i class="fas fa-star"></i>';
+        if ($i <= $rating) {
+            $html .= '<i class="fas fa-star"></i>';
+        } else {
+            $html .= '<i class="far fa-star"></i>';
+        }
     }
     return $html;
 }

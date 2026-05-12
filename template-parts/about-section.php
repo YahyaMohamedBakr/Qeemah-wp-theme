@@ -34,7 +34,7 @@
                     <div class="about-feature"><div class="about-feature-icon"><i class="fas fa-check-circle"></i></div><span>منصة تعليمية تفاعلية حديثة</span></div>
                     <div class="about-feature"><div class="about-feature-icon"><i class="fas fa-check-circle"></i></div><span>دعم فني متواصل 24/7</span></div>
                 </div>
-                <a href="<?php echo esc_url(get_permalink(get_page_by_path('contact'))); ?>" class="btn btn-primary">
+                <a href="<?php echo esc_url(qimah_get_page_url_by_path('contact')); ?>" class="btn btn-primary">
                     <span>اقرأ المزيد</span>
                     <i class="fas fa-arrow-left"></i>
                 </a>

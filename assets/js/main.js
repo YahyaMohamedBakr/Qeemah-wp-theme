@@ -259,18 +259,43 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const input = newsletterForm.querySelector('.newsletter-input');
             const email = input.value.trim();
+            const btn = newsletterForm.querySelector('.btn');
 
             if (email && isValidEmail(email)) {
-                // Show success feedback
-                const btn = newsletterForm.querySelector('.btn span');
-                const originalText = btn.textContent;
-                btn.textContent = 'تم الاشتراك بنجاح!';
+                const btnText = btn.querySelector('span');
+                const originalText = btnText.textContent;
+                btnText.textContent = 'جاري الاشتراك...';
+                btn.style.pointerEvents = 'none';
 
-                input.value = '';
-
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                }, 3000);
+                fetch(qimah_ajax.ajaxurl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        action: 'qimah_newsletter',
+                        nonce: qimah_ajax.nonce,
+                        email: email
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        btnText.textContent = 'تم الاشتراك بنجاح!';
+                        input.value = '';
+                    } else {
+                        btnText.textContent = data.data?.message || 'حدث خطأ';
+                    }
+                    setTimeout(() => {
+                        btnText.textContent = originalText;
+                        btn.style.pointerEvents = '';
+                    }, 3000);
+                })
+                .catch(() => {
+                    btnText.textContent = 'حدث خطأ';
+                    setTimeout(() => {
+                        btnText.textContent = originalText;
+                        btn.style.pointerEvents = '';
+                    }, 3000);
+                });
             }
         });
     }

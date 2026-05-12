@@ -19,7 +19,7 @@ if (!in_array($active_tab, $valid_tabs)) $active_tab = 'courses';
 $enrolled_courses = array();
 if (function_exists('tutor_utils')) {
     $enrolled_courses_ids = tutor_utils()->get_enrolled_courses_by_user($user_id);
-    if (is_array($enrolled_courses_ids)) {
+    if (!empty($enrolled_courses_ids)) {
         foreach ($enrolled_courses_ids as $course_obj) {
             $cid = $course_obj->ID;
             $progress = tutor_utils()->get_course_completed_percent($cid, $user_id);
@@ -381,11 +381,22 @@ get_header();
 
                     <?php
                     $orders = array();
-                    global $wpdb;
-                    $order_results = $wpdb->get_results($wpdb->prepare(
-                        "SELECT * FROM {$wpdb->prefix}tutor_earnings WHERE user_id = %d ORDER BY created_at DESC LIMIT 20",
-                        $user_id
-                    ));
+                    if (function_exists('tutor_utils') && class_exists('WooCommerce')) {
+                        $customer_orders = wc_get_orders(array(
+                            'customer' => $user_id,
+                            'limit'    => 20,
+                            'orderby'  => 'date',
+                            'order'    => 'DESC',
+                        ));
+                        foreach ($customer_orders as $order) {
+                            $orders[] = array(
+                                'id'    => $order->get_id(),
+                                'total' => $order->get_total(),
+                                'date'  => $order->get_date_created()->date_i18n('Y/m/d'),
+                                'status'=> wc_get_order_status_name($order->get_status()),
+                            );
+                        }
+                    }
                     ?>
 
                     <div class="dashboard-empty">

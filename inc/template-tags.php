@@ -79,12 +79,15 @@ function qimah_course_card($post_id = null) {
     $price = get_post_meta($post_id, '_tutor_course_price', true);
     $is_free = ($price_type === 'free' || ($price_type !== 'paid' && $price === ''));
     $course_level = get_post_meta($post_id, '_tutor_course_level', true);
+    $course_price_type = get_post_meta($post_id, '_tutor_course_price_type', true);
+    $data_category = 'recorded';
+    if ($course_price_type === 'free' || $course_price_type === '') $data_category = 'free';
     $lessons_count = 0;
     if (function_exists('tutor_utils')) {
         $lessons_count = intval(tutor_utils()->get_lesson_count_by_course($post_id));
     }
     ?>
-    <div class="course-card" data-aos="fade-up">
+    <div class="course-card" data-aos="fade-up" data-category="<?php echo esc_attr($data_category); ?>">
         <div class="course-image">
             <?php if ($thumb) : ?>
                 <img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($title); ?>">

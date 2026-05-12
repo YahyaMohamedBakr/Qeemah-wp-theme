@@ -23,11 +23,11 @@
                     </div>
                     <p class="footer-desc"><?php echo esc_html(get_theme_mod('qimah_footer_desc', 'مركز قيمة وقدوة للتدريب هو منصة تعليمية رائدة تسعى لبناء جيل واعٍ ومتميز.')); ?></p>
                     <div class="footer-social">
-                        <?php foreach (array('facebook', 'twitter', 'linkedin', 'youtube', 'instagram') as $s) :
+                        <?php foreach (array('facebook', 'twitter', 'linkedin', 'youtube', 'instagram', 'whatsapp') as $s) :
                             $url = get_theme_mod("qimah_{$s}", '');
                             if ($url) : ?>
                                 <a href="<?php echo esc_url($url); ?>" class="social-link" target="_blank" rel="noopener">
-                                    <i class="fab fa-<?php echo $s === 'twitter' ? 'x-twitter' : $s; ?>"></i>
+                                    <i class="fab fa-<?php echo $s === 'twitter' ? 'x-twitter' : ($s === 'whatsapp' ? 'whatsapp' : $s); ?>"></i>
                                 </a>
                             <?php endif;
                         endforeach; ?>

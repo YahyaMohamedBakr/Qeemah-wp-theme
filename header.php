@@ -47,7 +47,7 @@
                             echo '<li class="nav-item"><a href="' . home_url('/') . '#courses" class="nav-link">الدورات</a></li>';
                             echo '<li class="nav-item"><a href="' . home_url('/') . '#instructors" class="nav-link">المدربون</a></li>';
                             echo '<li class="nav-item"><a href="' . home_url('/') . '#testimonials" class="nav-link">الآراء</a></li>';
-                            echo '<li class="nav-item"><a href="' . esc_url(get_permalink(get_page_by_path('contact'))) . '" class="nav-link">اتصل بنا</a></li>';
+                            echo '<li class="nav-item"><a href="' . esc_url(qimah_get_page_url_by_path('contact')) . '" class="nav-link">اتصل بنا</a></li>';
                             echo '</ul>';
                         },
                     )); ?>
@@ -60,10 +60,10 @@
                         <a href="<?php echo esc_url(home_url('/dashboard')); ?>" class="btn btn-primary btn-sm"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a>
                     <?php else : ?>
                         <?php if (get_theme_mod('qimah_show_login', true)) : ?>
-                            <a href="<?php echo esc_url(get_permalink(get_page_by_path('login')) ?: wp_login_url()); ?>" class="btn btn-primary btn-sm">تسجيل الدخول</a>
+                            <a href="<?php echo esc_url(qimah_get_page_url_by_path('login') ?: wp_login_url()); ?>" class="btn btn-primary btn-sm">تسجيل الدخول</a>
                         <?php endif; ?>
                         <?php if (get_theme_mod('qimah_show_register', true)) : ?>
-                            <a href="<?php echo esc_url(get_permalink(get_page_by_path('login')) ?: wp_registration_url()); ?>" class="btn btn-outline btn-sm">حساب جديد</a>
+                            <a href="<?php echo esc_url(qimah_get_page_url_by_path('login') ?: wp_registration_url()); ?>" class="btn btn-outline btn-sm">حساب جديد</a>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
