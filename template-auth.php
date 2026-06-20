@@ -32,7 +32,8 @@ if (isset($_POST['qimah_login_nonce']) && wp_verify_nonce($_POST['qimah_login_no
         $login_error = preg_replace('/Lost your password\?/', '', $login_error);
         $login_error = trim($login_error);
     } else {
-        $redirect = isset($_POST['redirect_to']) ? esc_url($_POST['redirect_to']) : home_url('/dashboard');
+        $redirect_to = isset($_POST['redirect_to']) ? $_POST['redirect_to'] : '';
+        $redirect = wp_validate_redirect($redirect_to, home_url('/dashboard'));
         wp_safe_redirect($redirect);
         exit;
     }

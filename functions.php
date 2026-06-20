@@ -435,6 +435,14 @@ add_action('init', function() {
     }
 });
 
+/* ---------- Login redirect: admins to wp-admin, others to frontend ---------- */
+add_filter('login_redirect', function($redirect_to, $requested, $user) {
+    if (isset($user->ID) && $user->has_cap('manage_options')) {
+        return admin_url();
+    }
+    return $redirect_to ?: home_url('/dashboard');
+}, 10, 3);
+
 /* ---------- Remove emoji ---------- */
 remove_action('wp_head', 'print_emoji_detection_script', 7);
 remove_action('wp_print_styles', 'print_emoji_styles');
