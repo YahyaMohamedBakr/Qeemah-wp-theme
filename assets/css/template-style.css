@@ -497,17 +497,17 @@ body.admin-bar .page-banner {
 /* ============ DASHBOARD ============ */
 .dashboard-banner {
     background: var(--gradient-hero);
-    padding: 140px 0 60px;
+    padding: 160px 0 60px;
     position: relative;
     overflow: hidden;
 }
 /* Push below admin bar when logged in */
 body.admin-bar .dashboard-banner {
-    padding-top: 172px;
+    padding-top: 192px;
 }
 @media (max-width: 782px) {
     body.admin-bar .dashboard-banner {
-        padding-top: 186px;
+        padding-top: 206px;
     }
 }
 .dashboard-banner-shapes { position: absolute; inset: 0; pointer-events: none; }
@@ -2247,30 +2247,6 @@ body.tutor-dashboard-page .tutor-dashboard-permalinks a:hover {
 }
 
 @media (max-width: 768px) {
-    .nav { display: none; }
-    .nav.active {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        left: 0;
-        background: var(--white);
-        padding: 20px;
-        box-shadow: var(--shadow-lg);
-        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-        gap: 4px;
-    }
-    .nav.active .nav-link {
-        color: var(--text-secondary);
-        padding: 12px 16px;
-    }
-    .nav.active .nav-link:hover {
-        color: var(--primary);
-        background: var(--primary-lighter);
-    }
-    .menu-toggle { display: flex; }
-
     .hero-title { font-size: 2.2rem; }
     .hero-desc { font-size: 0.95rem; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -2689,4 +2665,63 @@ body.tutor-dashboard-page .tutor-dashboard-permalinks a:hover {
     .instructor-profile-block { padding: 20px; }
     .instructor-profile-achievements { grid-template-columns: 1fr; }
     .instructor-profile-avatar-wrap { height: 220px; }
+}
+
+/* ============ MOBILE NAV OVERLAY & CLOSE ============ */
+.nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition-fast);
+}
+.nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.nav-close {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: var(--gray-100);
+    color: var(--text-secondary);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition-base);
+    border: none;
+}
+.nav-close:hover {
+    background: var(--gray-200);
+    color: var(--dark);
+}
+
+@media (max-width: 768px) {
+    .nav-close { display: flex; }
+}
+
+/* ============ SEARCH OVERLAY MOBILE ============ */
+@media (max-width: 768px) {
+    .search-overlay {
+        z-index: 1001;
+    }
+    .search-overlay .search-form {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .search-overlay .search-input {
+        min-width: 100%;
+    }
+    .search-overlay .search-btn,
+    .search-overlay .search-close {
+        flex: 1;
+    }
 }

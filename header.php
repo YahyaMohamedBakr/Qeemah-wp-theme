@@ -34,7 +34,9 @@
                 </a>
 
                 <!-- Navigation -->
+                <div class="nav-overlay" id="navOverlay"></div>
                 <nav class="nav" id="nav">
+                    <button class="nav-close" id="navClose" aria-label="إغلاق القائمة"><i class="fas fa-times"></i></button>
                     <?php wp_nav_menu(array(
                         'theme_location' => 'primary',
                         'container'      => false,

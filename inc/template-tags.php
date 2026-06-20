@@ -22,7 +22,7 @@ function qimah_breadcrumb() {
     echo '<li class="breadcrumb-item"><a href="' . home_url('/') . '"><i class="fas fa-home"></i> الرئيسية</a></li>';
     if (is_singular()) {
         echo '<li class="breadcrumb-separator"><i class="fas fa-chevron-left"></i></li>';
-        echo '<li class="breadcrumb-item active"><span>' . get_the_title() . '</span></li>';
+        echo '<li class="breadcrumb-item active"><span>' . esc_html(get_the_title()) . '</span></li>';
     } elseif (is_search()) {
         echo '<li class="breadcrumb-separator"><i class="fas fa-chevron-left"></i></li>';
         echo '<li class="breadcrumb-item active"><span>نتائج البحث</span></li>';
@@ -31,7 +31,7 @@ function qimah_breadcrumb() {
         echo '<li class="breadcrumb-item active"><span>الصفحة غير موجودة</span></li>';
     } elseif (is_archive()) {
         echo '<li class="breadcrumb-separator"><i class="fas fa-chevron-left"></i></li>';
-        echo '<li class="breadcrumb-item active"><span>' . get_the_archive_title() . '</span></li>';
+        echo '<li class="breadcrumb-item active"><span>' . esc_html(get_the_archive_title()) . '</span></li>';
     }
     echo '</ol></nav>';
 }
@@ -108,7 +108,7 @@ function qimah_course_card($post_id = null) {
             <?php endif; ?>
             <?php if (!$is_free) : ?>
                 <?php if ($display_price) : ?>
-                    <div class="course-price"><span><?php echo $display_price; ?></span></div>
+                    <div class="course-price"><span><?php echo wp_kses_post($display_price); ?></span></div>
                 <?php elseif ($price) : ?>
                     <div class="course-price"><span><?php echo esc_html($price); ?></span><small>ر.س</small></div>
                 <?php else : ?>

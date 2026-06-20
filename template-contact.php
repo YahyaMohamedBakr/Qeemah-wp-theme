@@ -93,7 +93,7 @@ $hours = get_theme_mod('qimah_working_hours', 'الأحد - الخميس | 8:00 
                         <span class="contact-social-label">تابعنا على</span>
                         <?php foreach (array('twitter', 'linkedin', 'youtube', 'instagram') as $s) :
                             $url = get_theme_mod("qimah_{$s}", ''); if ($url) : ?>
-                            <a href="<?php echo esc_url($url); ?>" class="social-btn <?php echo $s; ?>" target="_blank"><i class="fab fa-<?php echo $s === 'twitter' ? 'x-twitter' : $s; ?>"></i></a>
+                            <a href="<?php echo esc_url($url); ?>" class="social-btn <?php echo esc_attr($s); ?>" target="_blank"><i class="fab fa-<?php echo $s === 'twitter' ? 'x-twitter' : $s; ?>"></i></a>
                         <?php endif; endforeach; ?>
                     </div>
                 </div>

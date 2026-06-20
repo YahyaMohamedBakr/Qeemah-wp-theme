@@ -3,7 +3,7 @@
  * Qimah Wa Qudwah Theme Functions
  */
 
-define('QIMAH_VERSION', '1.0.0');
+define('QIMAH_VERSION', '1.2.0');
 define('QIMAH_DIR', get_template_directory());
 define('QIMAH_URI', get_template_directory_uri());
 
@@ -104,7 +104,7 @@ add_action('widgets_init', 'qimah_widgets_init');
 /* ---------- Enqueue Styles & Scripts ---------- */
 function qimah_scripts() {
     $font_family = get_theme_mod('qimah_font_family', 'Cairo');
-    wp_enqueue_style('google-fonts', "https://fonts.googleapis.com/css2?family={$font_family}:wght@300;400;500;600;700;800;900&display=swap", array(), null);
+    wp_enqueue_style('google-fonts', "https://fonts.googleapis.com/css2?family=" . urlencode($font_family) . ":wght@300;400;500;600;700;800;900&display=swap", array(), null);
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css', array(), '6.5.1');
     wp_enqueue_style('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), '11.0.0');
     wp_enqueue_style('aos', 'https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css', array(), '2.3.4');
@@ -395,6 +395,9 @@ function qimah_handle_profile_update() {
         wp_redirect(home_url('/login'));
         exit;
     }
+    if (!current_user_can('read')) {
+        wp_die('Insufficient permissions.');
+    }
 
     $first_name = sanitize_text_field($_POST['first_name'] ?? '');
     $last_name  = sanitize_text_field($_POST['last_name'] ?? '');
@@ -420,13 +423,13 @@ function qimah_handle_profile_update() {
 add_action('init', function() {
     if (!isset($_SERVER['REQUEST_URI'])) return;
     if (strpos($_SERVER['REQUEST_URI'], 'wp-login.php') === false) return;
-    if (isset($_REQUEST['action']) && $_REQUEST['action'] !== '') return;
+    if (isset($_GET['action']) && $_GET['action'] !== '') return;
     if (defined('DOING_AJAX') && DOING_AJAX) return;
     if (defined('DOING_CRON') && DOING_CRON) return;
 
     $auth_page = qimah_get_page_by_path('login');
     if ($auth_page) {
-        $redirect = isset($_REQUEST['redirect_to']) ? '?redirect_to=' . urlencode($_REQUEST['redirect_to']) : '';
+        $redirect = isset($_GET['redirect_to']) ? '?redirect_to=' . urlencode($_GET['redirect_to']) : '';
         wp_safe_redirect(get_permalink($auth_page->ID) . $redirect);
         exit;
     }

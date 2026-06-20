@@ -38,57 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ============ MOBILE MENU ============
-    const menuToggle = document.getElementById('menuToggle');
-    const nav = document.getElementById('nav');
-
-    if (menuToggle && nav) {
-        menuToggle.addEventListener('click', () => {
-            nav.classList.toggle('active');
-            menuToggle.classList.toggle('active');
-        });
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                nav.classList.remove('active');
-                menuToggle.classList.remove('active');
-            });
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!nav.contains(e.target) && !menuToggle.contains(e.target)) {
-                nav.classList.remove('active');
-                menuToggle.classList.remove('active');
-            }
-        });
-    }
-
-    // ============ SEARCH OVERLAY ============
-    const btnSearch = document.getElementById('btnSearch');
-    const searchOverlay = document.getElementById('searchOverlay');
-    const searchClose = document.getElementById('searchClose');
-
-    if (btnSearch && searchOverlay && searchClose) {
-        const searchInput = searchOverlay.querySelector('.search-input');
-
-        btnSearch.addEventListener('click', () => {
-            searchOverlay.classList.toggle('active');
-            if (searchOverlay.classList.contains('active')) {
-                setTimeout(() => searchInput.focus(), 300);
-            }
-        });
-
-        searchClose.addEventListener('click', () => {
-            searchOverlay.classList.remove('active');
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                searchOverlay.classList.remove('active');
-            }
-        });
-    }
-
     // ============ ARCHIVE FILTER BUTTONS ============
     const filterBtns = document.querySelectorAll('.archive-filter-btn');
 
