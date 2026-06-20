@@ -21,7 +21,7 @@ if (isset($_POST['qimah_login_nonce']) && wp_verify_nonce($_POST['qimah_login_no
         'user_password' => $_POST['pwd'],
         'remember'      => isset($_POST['rememberme']),
     );
-    $user = wp_signon($creds, false);
+    $user = wp_signon($creds);
     if (is_wp_error($user)) {
         $login_error = wp_strip_all_tags($user->get_error_message());
         // Translate common WordPress error messages to Arabic
