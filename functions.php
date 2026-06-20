@@ -426,7 +426,6 @@ add_action('init', function() {
     if (isset($_GET['action']) && $_GET['action'] !== '') return;
     if (defined('DOING_AJAX') && DOING_AJAX) return;
     if (defined('DOING_CRON') && DOING_CRON) return;
-    if (is_user_logged_in()) return;
 
     $auth_page = qimah_get_page_by_path('login');
     if ($auth_page) {
@@ -435,14 +434,6 @@ add_action('init', function() {
         exit;
     }
 });
-
-/* ---------- Login redirect: admins to wp-admin, others to frontend ---------- */
-add_filter('login_redirect', function($redirect_to, $requested, $user) {
-    if (isset($user->ID) && $user->has_cap('manage_options')) {
-        return admin_url();
-    }
-    return $redirect_to ?: home_url('/dashboard');
-}, 10, 3);
 
 /* ---------- Remove emoji ---------- */
 remove_action('wp_head', 'print_emoji_detection_script', 7);
