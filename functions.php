@@ -426,6 +426,7 @@ add_action('init', function() {
     if (isset($_GET['action']) && $_GET['action'] !== '') return;
     if (defined('DOING_AJAX') && DOING_AJAX) return;
     if (defined('DOING_CRON') && DOING_CRON) return;
+    if (is_user_logged_in()) return;
 
     $auth_page = qimah_get_page_by_path('login');
     if ($auth_page) {
