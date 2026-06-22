@@ -25,14 +25,7 @@ if (isset($_POST['qimah_login_nonce']) && wp_verify_nonce($_POST['qimah_login_no
     );
     $user = wp_signon($creds);
     if (is_wp_error($user)) {
-        $login_error = wp_strip_all_tags($user->get_error_message());
-        // Translate common WordPress error messages to Arabic
-        $login_error = str_replace('The password you entered for the username', 'كلمة المرور التي أدخلتها لاسم المستخدم', $login_error);
-        $login_error = str_replace('is incorrect.', 'غير صحيحة.', $login_error);
-        $login_error = str_replace('Invalid username', 'اسم المستخدم غير صالح', $login_error);
-        $login_error = str_replace('Invalid email address.', 'البريد الإلكتروني غير صالح.', $login_error);
-        $login_error = preg_replace('/Lost your password\?/', '', $login_error);
-        $login_error = trim($login_error);
+        $login_error = 'بيانات الدخول غير صحيحة. يرجى المحاولة مرة أخرى.';
     } else {
         wp_set_current_user($user->ID);
         $redirect_to = isset($_POST['redirect_to']) ? $_POST['redirect_to'] : '';
@@ -69,7 +62,7 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
     } elseif (!$terms_accepted) {
         $register_error = 'يجب الموافقة على شروط الاستخدام وسياسة الخصوصية لإنشاء الحساب.';
     } elseif (email_exists($email)) {
-        $register_error = 'البريد الإلكتروني مسجل بالفعل. <a href="#" onclick="document.getElementById(\'tabLogin\').click(); return false;">سجّل دخولك من هنا</a>.';
+        $register_error = 'البريد الإلكتروني مسجل بالفعل. <a href="#" id="switchToLoginLink">سجّل دخولك من هنا</a>.';
     } elseif (username_exists($username)) {
         $register_error = 'اسم المستخدم مسجل بالفعل.';
     } else {
@@ -293,7 +286,7 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
                     <?php if ($register_error) : ?>
                     <div class="auth-notice auth-notice-error">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <span><?php echo wp_kses($register_error, array('a' => array('href' => array(), 'onclick' => array()))); ?></span>
+                        <span><?php echo wp_kses($register_error, array('a' => array('href' => array(), 'id' => array(), 'class' => array()))); ?></span>
                     </div>
                     <?php endif; ?>
 
@@ -391,7 +384,7 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
 
                     <!-- Login prompt -->
                     <p class="auth-login-prompt">
-                        لديك حساب بالفعل؟ <a href="#" onclick="document.getElementById('tabLogin').click(); return false;">سجّل دخولك</a>
+                        لديك حساب بالفعل؟ <a href="#" id="switchToLoginFromRegister">سجّل دخولك</a>
                     </p>
                 </div>
             </div>
@@ -433,6 +426,24 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
         <?php if ($register_error) : ?>
         switchTab('register');
         <?php endif; ?>
+
+        // Switch to login tab from error message link
+        var switchToLogin = document.getElementById('switchToLoginLink');
+        if (switchToLogin) {
+            switchToLogin.addEventListener('click', function(e) {
+                e.preventDefault();
+                switchTab('login');
+            });
+        }
+
+        // Switch to login tab from register form prompt
+        var switchToLoginFromRegister = document.getElementById('switchToLoginFromRegister');
+        if (switchToLoginFromRegister) {
+            switchToLoginFromRegister.addEventListener('click', function(e) {
+                e.preventDefault();
+                switchTab('login');
+            });
+        }
 
         // Password toggle
         document.querySelectorAll('.auth-password-toggle').forEach(function(btn) {

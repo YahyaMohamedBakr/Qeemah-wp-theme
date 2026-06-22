@@ -104,7 +104,7 @@ add_action('widgets_init', 'qimah_widgets_init');
 /* ---------- Enqueue Styles & Scripts ---------- */
 function qimah_scripts() {
     $font_family = get_theme_mod('qimah_font_family', 'Cairo');
-    wp_enqueue_style('google-fonts', "https://fonts.googleapis.com/css2?family=" . urlencode($font_family) . ":wght@300;400;500;600;700;800;900&display=swap", array(), null);
+    wp_enqueue_style('google-fonts', "https://fonts.googleapis.com/css2?family=" . urlencode($font_family) . ":wght@300;400;500;600;700;800;900&display=swap", array(), QIMAH_VERSION);
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css', array(), '6.5.1');
     wp_enqueue_style('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), '11.0.0');
     wp_enqueue_style('aos', 'https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css', array(), '2.3.4');
@@ -134,8 +134,9 @@ function qimah_scripts() {
     }
 
     wp_localize_script('qimah-main', 'qimah_ajax', array(
-        'ajaxurl' => admin_url('admin-ajax.php'),
-        'nonce'   => wp_create_nonce('qimah_nonce'),
+        'ajaxurl'         => admin_url('admin-ajax.php'),
+        'newsletter_nonce' => wp_create_nonce('qimah_newsletter'),
+        'cart_nonce'       => wp_create_nonce('qimah_cart_count'),
     ));
 
     if (is_singular() && comments_open() && get_option('thread_comments')) {
@@ -362,7 +363,7 @@ function qimah_handle_contact() {
 
 /* ---------- AJAX ---------- */
 function qimah_cart_count_ajax() {
-    check_ajax_referer('qimah_nonce', 'nonce');
+    check_ajax_referer('qimah_cart_count', 'nonce');
     $count = 0;
     if (class_exists('WooCommerce')) {
         $count = WC()->cart->get_cart_contents_count();
@@ -373,7 +374,7 @@ add_action('wp_ajax_qimah_cart_count', 'qimah_cart_count_ajax');
 add_action('wp_ajax_nopriv_qimah_cart_count', 'qimah_cart_count_ajax');
 
 function qimah_newsletter_ajax() {
-    check_ajax_referer('qimah_nonce', 'nonce');
+    check_ajax_referer('qimah_newsletter', 'nonce');
     $email = sanitize_email($_POST['email'] ?? '');
     if (is_email($email)) {
         wp_send_json_success(array('message' => 'تم الاشتراك بنجاح!'));
@@ -421,8 +422,9 @@ function qimah_handle_profile_update() {
 
 /* ---------- Redirect wp-login to custom auth ---------- */
 add_action('init', function() {
-    if (!isset($_SERVER['REQUEST_URI'])) return;
-    if (strpos($_SERVER['REQUEST_URI'], 'wp-login.php') === false) return;
+    $request_uri = isset($_SERVER['REQUEST_URI']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])) : '';
+    if (!$request_uri) return;
+    if (strpos($request_uri, 'wp-login.php') === false) return;
     if (isset($_GET['action']) && $_GET['action'] !== '') return;
     if (defined('DOING_AJAX') && DOING_AJAX) return;
     if (defined('DOING_CRON') && DOING_CRON) return;

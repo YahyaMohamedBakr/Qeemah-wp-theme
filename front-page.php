@@ -22,7 +22,7 @@ get_header();
 <div class="page-banner">
     <div class="container">
         <div class="page-banner-content" data-aos="fade-up">
-            <h1><?php the_title(); ?></h1>
+            <h1><?php echo esc_html(get_the_title()); ?></h1>
             <?php qimah_breadcrumb(); ?>
         </div>
     </div>
@@ -32,7 +32,7 @@ get_header();
         <?php while (have_posts()) : the_post(); ?>
             <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
                 <header class="entry-header">
-                    <h2 class="entry-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                    <h2 class="entry-title"><a href="<?php the_permalink(); ?>"><?php echo esc_html(get_the_title()); ?></a></h2>
                 </header>
                 <div class="entry-content">
                     <?php the_content(); ?>

@@ -37,18 +37,18 @@ get_header();
                         <div class="blog-card-content">
                             <div class="blog-card-meta">
                                 <span><i class="fas fa-calendar-alt"></i> <?php echo get_the_date(); ?></span>
-                                <span><i class="fas fa-user"></i> <?php the_author(); ?></span>
+                                <span><i class="fas fa-user"></i> <?php echo esc_html(get_the_author()); ?></span>
                                 <?php if (has_category()) : ?>
-                                    <span><i class="fas fa-folder"></i> <?php the_category(', '); ?></span>
+                                    <span><i class="fas fa-folder"></i> <?php echo get_the_category_list(esc_html__(', ', 'qimah-wa-qudwah')); ?></span>
                                 <?php endif; ?>
                             </div>
 
                             <h2 class="blog-card-title">
-                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                                <a href="<?php the_permalink(); ?>"><?php echo esc_html(get_the_title()); ?></a>
                             </h2>
 
                             <div class="blog-card-excerpt">
-                                <?php the_excerpt(); ?>
+                                <?php echo esc_html(get_the_excerpt()); ?>
                             </div>
 
                             <a href="<?php the_permalink(); ?>" class="btn btn-primary btn-sm">

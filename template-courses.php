@@ -19,7 +19,7 @@ get_template_part('template-parts/page-banner');
                 <!-- Filter & Sort Toolbar -->
                 <div class="archive-toolbar" data-aos="fade-up" data-aos-delay="100">
                     <div class="archive-filter-btns">
-                        <button class="archive-filter-btn active" data-filter="all"><i class="fas fa-th-large"></i> الكل <span class="badge-count"><?php echo $wp_query->found_posts; ?></span></button>
+                        <button class="archive-filter-btn active" data-filter="all"><i class="fas fa-th-large"></i> الكل <span class="badge-count"><?php echo intval($wp_query->found_posts); ?></span></button>
                         <button class="archive-filter-btn" data-filter="remote"><i class="fas fa-video"></i> عن بعد</button>
                         <button class="archive-filter-btn" data-filter="recorded"><i class="fas fa-play-circle"></i> مسجلة</button>
                         <button class="archive-filter-btn" data-filter="free"><i class="fas fa-gift"></i> مجانية</button>
@@ -28,7 +28,7 @@ get_template_part('template-parts/page-banner');
 
                 <!-- Results Info -->
                 <div class="archive-results-info" data-aos="fade-up">
-                    <p class="archive-results-count">عرض <strong><?php echo $wp_query->found_posts; ?> دورة</strong></p>
+                    <p class="archive-results-count">عرض <strong><?php echo intval($wp_query->found_posts); ?> دورة</strong></p>
                 </div>
 
                 <!-- Course Cards Grid -->

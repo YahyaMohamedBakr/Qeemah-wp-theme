@@ -40,14 +40,14 @@ $instructor_query = new WP_Query(array(
                         <div class="instructor-avatar">
                             <img src="<?php echo esc_url($avatar_url); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-full);">
                             <?php if ($linkedin || $twitter || $email) : ?>
-                            <div class="instructor-social" onclick="event.stopPropagation();">
-                                <?php if ($linkedin) : ?><a href="<?php echo esc_url($linkedin); ?>" target="_blank" rel="noopener" onclick="event.stopPropagation();"><i class="fab fa-linkedin-in"></i></a><?php endif; ?>
-                                <?php if ($twitter) : ?><a href="<?php echo esc_url($twitter); ?>" target="_blank" rel="noopener" onclick="event.stopPropagation();"><i class="fab fa-twitter"></i></a><?php endif; ?>
-                                <?php if ($email) : ?><a href="mailto:<?php echo esc_attr($email); ?>" onclick="event.stopPropagation();"><i class="fas fa-envelope"></i></a><?php endif; ?>
+                            <div class="instructor-social">
+                                <?php if ($linkedin) : ?><a href="<?php echo esc_url($linkedin); ?>" target="_blank" rel="noopener" class="instructor-social-link"><i class="fab fa-linkedin-in"></i></a><?php endif; ?>
+                                <?php if ($twitter) : ?><a href="<?php echo esc_url($twitter); ?>" target="_blank" rel="noopener" class="instructor-social-link"><i class="fab fa-twitter"></i></a><?php endif; ?>
+                                <?php if ($email) : ?><a href="mailto:<?php echo esc_attr($email); ?>" class="instructor-social-link"><i class="fas fa-envelope"></i></a><?php endif; ?>
                             </div>
                             <?php endif; ?>
                         </div>
-                        <h3 class="instructor-name"><?php the_title(); ?></h3>
+                        <h3 class="instructor-name"><?php echo esc_html(get_the_title()); ?></h3>
                         <p class="instructor-role"><?php echo esc_html($specialization ?: get_the_excerpt()); ?></p>
                         <div class="instructor-stats">
                             <?php if ($courses_count) : ?>

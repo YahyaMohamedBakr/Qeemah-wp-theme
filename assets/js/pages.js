@@ -152,7 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             btn.style.pointerEvents = '';
                             // Redirect to first lesson after a brief delay
                             setTimeout(() => {
-                                window.location.href = btn.href;
+                                var redirectUrl = btn.getAttribute('href');
+                                if (redirectUrl && (redirectUrl.startsWith(window.location.origin) || redirectUrl.startsWith('/'))) {
+                                    window.location.href = redirectUrl;
+                                }
                             }, 1000);
                         } else {
                             btn.innerHTML = originalText;
@@ -168,7 +171,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } else {
                 // Fallback: redirect to the course page (Tutor LMS will handle enrollment)
-                window.location.href = btn.href;
+                var fallbackUrl = btn.getAttribute('href');
+                if (fallbackUrl && (fallbackUrl.startsWith(window.location.origin) || fallbackUrl.startsWith('/'))) {
+                    window.location.href = fallbackUrl;
+                }
             }
         });
     }

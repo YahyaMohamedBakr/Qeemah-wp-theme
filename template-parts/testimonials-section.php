@@ -47,7 +47,7 @@ $use_carousel  = ($total_testimonials > $static_count);
                                     <div class="testimonial-avatar"><i class="fas fa-user"></i></div>
                                 <?php endif; ?>
                                 <div class="testimonial-info">
-                                    <h4><?php the_title(); ?></h4>
+                                    <h4><?php echo esc_html(get_the_title()); ?></h4>
                                     <?php if ($role) : ?><span><?php echo esc_html($role); ?></span><?php endif; ?>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@ $use_carousel  = ($total_testimonials > $static_count);
                             <div class="testimonial-avatar"><i class="fas fa-user"></i></div>
                         <?php endif; ?>
                         <div class="testimonial-info">
-                            <h4><?php the_title(); ?></h4>
+                            <h4><?php echo esc_html(get_the_title()); ?></h4>
                             <?php if ($role) : ?><span><?php echo esc_html($role); ?></span><?php endif; ?>
                         </div>
                     </div>

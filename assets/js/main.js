@@ -275,11 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch(qimah_ajax.ajaxurl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({
-                        action: 'qimah_newsletter',
-                        nonce: qimah_ajax.nonce,
-                        email: email
-                    })
+                body: new URLSearchParams({
+                    action: 'qimah_newsletter',
+                    nonce: qimah_ajax.newsletter_nonce,
+                    email: email
+                })
                 })
                 .then(res => res.json())
                 .then(data => {
@@ -324,6 +324,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ============ INSTRUCTOR SOCIAL CLICK ============
+    document.querySelectorAll('.instructor-social-link').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    });
+
+    // ============ SEARCH CLOSE ============
+    const searchClose = document.getElementById('searchClose');
+    if (searchClose) {
+        searchClose.addEventListener('click', function() {
+            document.getElementById('searchOverlay').classList.remove('active');
+        });
+    }
+
     // ============ CART BADGE UPDATE ============
     const cartBadge = document.querySelector('.cart-badge');
     if (cartBadge) {
@@ -333,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
                     action: 'qimah_cart_count',
-                    nonce: qimah_ajax.nonce,
+                    nonce: qimah_ajax.cart_nonce,
                 })
             })
             .then(res => res.json())

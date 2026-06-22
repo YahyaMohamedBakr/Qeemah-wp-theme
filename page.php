@@ -6,7 +6,7 @@ get_template_part('template-parts/page-banner');
     <div class="container">
         <article <?php post_class(); ?>>
             <header class="entry-header">
-                <h1 class="entry-title" style="margin-top:16px;"><?php the_title(); ?></h1>
+                <h1 class="entry-title" style="margin-top:16px;"><?php echo esc_html(get_the_title()); ?></h1>
             </header>
             <div class="entry-content" style="margin-top:24px;">
                 <?php the_content(); ?>

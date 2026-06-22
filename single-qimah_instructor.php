@@ -25,7 +25,7 @@ if (!$avatar_url) {
 <div class="page-banner">
     <div class="container">
         <div class="page-banner-content" data-aos="fade-up">
-            <h1><?php the_title(); ?></h1>
+            <h1><?php echo esc_html(get_the_title()); ?></h1>
             <?php if ($specialization) : ?>
                 <p style="color:rgba(255,255,255,0.85);font-size:1.05rem;margin-top:8px;"><?php echo esc_html($specialization); ?></p>
             <?php endif; ?>
@@ -55,7 +55,7 @@ if (!$avatar_url) {
 
                     <!-- Name & Title -->
                     <div class="instructor-profile-info">
-                        <h2><?php the_title(); ?></h2>
+                        <h2><?php echo esc_html(get_the_title()); ?></h2>
                         <?php if ($specialization) : ?>
                             <p class="instructor-profile-spec"><?php echo esc_html($specialization); ?></p>
                         <?php endif; ?>

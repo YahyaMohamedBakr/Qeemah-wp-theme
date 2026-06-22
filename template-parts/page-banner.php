@@ -7,7 +7,7 @@ $title = is_search() ? 'نتائج البحث: ' . get_search_query() : get_the_
 <section class="page-banner">
     <div class="container">
         <div class="page-banner-content" data-aos="fade-up">
-            <h1><?php echo wp_kses_post($title); ?></h1>
+            <h1><?php echo esc_html($title); ?></h1>
             <?php qimah_breadcrumb(); ?>
         </div>
     </div>

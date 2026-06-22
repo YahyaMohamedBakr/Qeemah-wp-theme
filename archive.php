@@ -10,8 +10,8 @@ get_template_part('template-parts/page-banner');
                     <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
                         <?php qimah_post_thumbnail(); ?>
                         <div class="course-content" style="margin-top:16px;">
-                            <h2 class="course-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                            <p class="course-excerpt"><?php the_excerpt(); ?></p>
+                            <h2 class="course-title"><a href="<?php the_permalink(); ?>"><?php echo esc_html(get_the_title()); ?></a></h2>
+                            <p class="course-excerpt"><?php echo esc_html(get_the_excerpt()); ?></p>
                             <div class="course-footer" style="margin-top:16px;">
                                 <?php qimah_posted_on(); ?>
                             </div>

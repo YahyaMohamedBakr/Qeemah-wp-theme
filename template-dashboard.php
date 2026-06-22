@@ -357,7 +357,7 @@ get_header();
                                 $percent = $qa['total'] > 0 ? round(($qa['score'] / $qa['total']) * 100) : 0;
                                 $score_class = $percent >= 80 ? 'success' : ($percent >= 50 ? 'warning' : 'danger');
                                 ?>
-                                <div class="dashboard-quiz-percent <?php echo esc_attr($score_class); ?>"><?php echo $percent; ?>%</div>
+                                <div class="dashboard-quiz-percent <?php echo esc_attr($score_class); ?>"><?php echo intval($percent); ?>%</div>
                                 <span class="dashboard-quiz-marks"><?php echo intval($qa['score']); ?>/<?php echo intval($qa['total']); ?></span>
                             </div>
                         </div>
