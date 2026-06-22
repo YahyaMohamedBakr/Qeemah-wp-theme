@@ -3,6 +3,8 @@
  * Template Name: تسجيل الدخول / حساب جديد
  * Description: صفحة تسجيل الدخول وإنشاء حساب جديد بتصميم متوافق مع التمبلت
  */
+nocache_headers();
+
 if (is_user_logged_in()) {
     wp_redirect(home_url('/dashboard'));
     exit;
@@ -32,9 +34,12 @@ if (isset($_POST['qimah_login_nonce']) && wp_verify_nonce($_POST['qimah_login_no
         $login_error = preg_replace('/Lost your password\?/', '', $login_error);
         $login_error = trim($login_error);
     } else {
+        wp_set_current_user($user->ID);
         $redirect_to = isset($_POST['redirect_to']) ? $_POST['redirect_to'] : '';
         $redirect = wp_validate_redirect($redirect_to, home_url('/dashboard'));
         wp_safe_redirect($redirect);
+        echo '<meta http-equiv="refresh" content="0;url=' . esc_url($redirect) . '">';
+        echo '<script>window.location.replace(' . wp_json_encode($redirect) . ');</script>';
         exit;
     }
 }
@@ -84,6 +89,8 @@ if (isset($_POST['qimah_register_nonce']) && wp_verify_nonce($_POST['qimah_regis
             // Auto login
             wp_set_auth_cookie($user_id);
             wp_safe_redirect(home_url('/dashboard'));
+            echo '<meta http-equiv="refresh" content="0;url=' . esc_url(home_url('/dashboard')) . '">';
+            echo '<script>window.location.replace(' . wp_json_encode(home_url('/dashboard')) . ');</script>';
             exit;
         } else {
             $register_error = wp_strip_all_tags($user_id->get_error_message());
