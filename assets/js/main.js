@@ -327,14 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ============ SEARCH CLOSE ============
-    const searchClose = document.getElementById('searchClose');
-    if (searchClose) {
-        searchClose.addEventListener('click', function() {
-            document.getElementById('searchOverlay').classList.remove('active');
-        });
-    }
-
     // ============ CART BADGE UPDATE ============
     const cartBadge = document.querySelector('.cart-badge');
     if (cartBadge) {
