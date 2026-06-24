@@ -6,15 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ============ PRELOADER ============
     const preloader = document.getElementById('preloader');
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            preloader.classList.add('hidden');
-        }, 800);
-    });
-    // Fallback: hide preloader after 3 seconds
-    setTimeout(() => {
-        preloader.classList.add('hidden');
-    }, 3000);
+    if (preloader) {
+        const hidePreloader = () => preloader.classList.add('hidden');
+        window.addEventListener('load', () => setTimeout(hidePreloader, 800));
+        setTimeout(hidePreloader, 3000);
+    }
 
     // ============ HEADER SCROLL ============
     const header = document.getElementById('header');
